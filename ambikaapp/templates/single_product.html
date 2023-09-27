@@ -1,0 +1,168 @@
+<div class="container">
+    {% csrf_token %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
+    <h1>Product Details</h1>
+    {% if product %}
+        <h2>{{ product.name }}</h2>
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <p><strong>Specification:</strong> {{ product.specification }}</p>
+        <p><strong>Price:</strong> ₹{{ product.price }}</p>
+        <div class="color-box" style="background-color: {{ product.colour_colour }}"></div>
+
+        <p><strong>Select Size:</strong></p>
+        <div class="size-buttons">
+            {% for size in product.productsize_set.all %}
+            <button class="size-button" data-size="{{ size.size }}">
+                {{ size.size }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <p><strong>Selected Size:</strong> <span id="selected-size"></span></p>
+
+        <!-- Quantity controls -->
+        <div class="quantity-controls">
+            <button id="decrease-quantity" class="btn btn-outline-secondary">-</button>
+            <span id="quantity">1</span>
+            <button id="increase-quantity" class="btn btn-outline-secondary">+</button>
+        </div>
+
+        <button
+            id="add-to-cart-button"
+            data-product="{{ product.id }}"
+            data-action="add"
+            class="btn btn-outline-success">
+            Add to Cart
+        </button>
+
+        <button
+            id="remove-from-cart-button"
+            data-product="{{ product.id }}"
+            data-action="remove"
+            class="btn btn-outline-danger">
+            Remove from Cart
+        </button>
+    {% else %}
+        <p>Product not found.</p>
+    {% endif %}
+</div>
+
+<script>
+    function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getToken('csrftoken');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const sizeButtons = document.querySelectorAll('.size-button');
+        const selectedSize = document.getElementById('selected-size');
+        const decreaseQuantity = document.getElementById('decrease-quantity');
+        const increaseQuantity = document.getElementById('increase-quantity');
+        const quantityElement = document.getElementById('quantity');
+        const addToCartButton = document.getElementById('add-to-cart-button');
+        const removeFromCartButton = document.getElementById('remove-from-cart-button');
+
+        // Initialize selected size and quantity
+        let selectedSizeValue = '';
+        let quantity = 1;
+
+        // Add click event listener to size buttons
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const size = this.getAttribute('data-size');
+                selectedSizeValue = size;
+                selectedSize.textContent = size;
+            });
+        });
+
+        // Decrease quantity
+        decreaseQuantity.addEventListener('click', function () {
+            if (quantity > 1) {
+                quantity--;
+                quantityElement.textContent = quantity;
+            }
+        });
+
+        // Increase quantity
+        increaseQuantity.addEventListener('click', function () {
+            quantity++;
+            quantityElement.textContent = quantity;
+        });
+
+        // Add click event listener to Add to Cart button
+       // Add click event listener to Add to Cart button
+addToCartButton.addEventListener('click', function () {
+    const productID = this.getAttribute('data-product');
+    const action = 'add';
+
+    // Check if a size is selected
+    if (selectedSizeValue === '') {
+        // Display an error message or alert to inform the user to select a size
+        console.log('Please select a size before adding to cart.');
+        return; // Exit the function and do not proceed
+    }
+
+    const data = {
+        'product_id': productID,
+        'action': action,
+        'size': selectedSizeValue,
+        'quantity': quantity,
+    };
+
+    sendCartRequest(data);
+});
+
+
+        // Add click event listener to Remove from Cart button
+        removeFromCartButton.addEventListener('click', function () {
+            const productID = this.getAttribute('data-product');
+            const action = 'remove';
+
+            const data = {
+                'product_id': productID,
+                'action': action,
+                'size': selectedSizeValue,
+                'quantity': quantity,
+            };
+
+            sendCartRequest(data);
+        });
+
+        // Function to send cart request
+        function sendCartRequest(data) {
+            fetch('/add_to_cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                location.reload();
+                // Handle success or error messages here
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error (e.g., display an error message to the user)
+            });
+        }
+    });
+</script>

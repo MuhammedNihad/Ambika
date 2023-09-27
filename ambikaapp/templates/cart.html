@@ -1,0 +1,119 @@
+<!-- Inside your cart.html template -->
+{% load static %}
+{% csrf_token %}
+<div class="container">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+
+Your Cart
+
+<table>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Size</th>
+			<th>Quantity</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for order_item in order_items %}
+		<tr>
+			<td>{{ order_item.product.name }}</td>
+			<td class="size" data-id="{{ order_item.id }}">{{ order_item.size }}</td>
+			<td>
+				<button class="quantity-button" data-action="decrement" data-id="{{ order_item.id }}">-</button>
+				<span class="quantity" data-id="{{ order_item.id }}" data-quantity="{{ order_item.quantity }}">{{ order_item.quantity }}</span>
+				<button class="quantity-button" data-action="increment" data-id="{{ order_item.id }}">+</button>
+			</td>
+			<td class="price" data-id="{{ order_item.id }}" data-price="{{ order_item.product.price }}">₹{{ order_item.product.price }}</td>
+		</tr>
+		{% endfor %}
+	  <h5>{{ total_amount }}</h5>  
+	</tbody>
+</table>
+<script>
+	function getToken(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	const csrftoken = getToken('csrftoken');
+	document.addEventListener('DOMContentLoaded', function () {
+	const quantityButtons = document.querySelectorAll('.quantity-button');
+	
+	quantityButtons.forEach(button => {
+		button.addEventListener('click', function () {
+			const action = this.getAttribute('data-action');
+			const id = this.getAttribute('data-id');
+			const quantityElement = document.querySelector(`.quantity[data-id="${id}"]`);
+			const sizeElement = document.querySelector(`.size[data-id="${id}"]`);
+			const priceElement = document.querySelector(`.price[data-id="${id}"]`);
+			
+			let quantity = parseInt(quantityElement.getAttribute('data-quantity'));
+			const price = parseFloat(priceElement.getAttribute('data-price'));
+			const size = sizeElement.textContent;
+			
+			if (action === 'increment') {
+				quantity++;
+			} else if (action === 'decrement' && quantity > 0) {
+				quantity--;
+			}
+			
+			// Update the displayed quantity
+			quantityElement.textContent = quantity;
+			quantityElement.setAttribute('data-quantity', quantity);
+			
+			// Calculate the new total price
+			const total_price = price * quantity;
+			
+			// Send an AJAX request to update the quantity on the server
+			updateQuantity(id, quantity, total_price);
+		});
+	});
+
+	function updateQuantity(id, quantity, total_price) {
+		// Send an AJAX request to update the quantity on the server
+		const data = {
+			'id': id,
+			'quantity': quantity,
+			'total_price': total_price
+		};
+
+		fetch('/update_quantity/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrftoken,
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				console.log(data.message); // Output success message (if any)
+				location.reload();
+				// Update the total amount or display a confirmation message here
+			} else {
+				console.error(data.message); // Handle error message
+			}
+		})
+
+		.catch(error => {
+			console.error('Error:', error);
+			// Handle error (e.g., display an error message to the user)
+		});
+	}
+});
+</script>
