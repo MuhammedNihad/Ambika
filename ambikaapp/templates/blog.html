@@ -1,0 +1,425 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>snitch</title>
+    <link rel="stylesheet" href="{% static 'assets/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/sidebar.css' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <section>
+        <div id="carouselExampleSlidesOnly" class="carousel slide " data-bs-ride="carousel">
+            <div class="carousel-inner text-center bg-dark text-light ">
+                <div class="carousel-item active">
+                    <p>BUY 5 GET 15% OFF Use Code: DEAL15</p>
+                </div>
+                <div class="carousel-item">
+                    <p>BUY 2 GET 10% OFF USE CODE: DEAL10</p>
+                </div>
+                <div class="carousel-item">
+                    <p>BUY 7 GET 20% OFF USE CODE: DEAL20</p>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar ">
+            <div class="container-fluid">
+                <div class="container nav-container text-center">
+
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <input class="checkbox" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                                aria-controls="offcanvasExample" type="button" />
+                            <div class="hamburger-lines">
+                                <span class="line line1"></span>
+                                <span class="line line2" style="width: 75%"></span>
+                                <span class="line line3"></span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <img src="/static/assets/images/snitch.avif" alt="" width="200" height="52" class=" align-text-top">
+                        </div>
+                        <div class="col">
+                            <div class="row align-items-start icon-row">
+                                <div class="col"></div>
+                                <div class="col"></div>
+                                <div class="col"></div>
+                                <div class="col"></div>
+                                <div class="col"></div>
+                                <div class="col">
+                                    <!-- <svg width="40px" aria-hidden="true" focusable="false" role="presentation" 
+                                        class="icon icon-user" viewBox="0 0 64 64" width="26" height="26" stroke="currentColor"
+                                        stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M35 39.84v-2.53c3.3-1.91 6-6.66 6-11.41 0-7.63 0-13.82-9-13.82s-9 6.19-9 13.82c0 4.75 2.7 9.51 6 11.41v2.53c-10.18.85-18 6-18 12.16h42c0-6.19-7.82-11.31-18-12.16z">
+                                        </path>
+                                    </svg> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                        class="bi bi-person" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                                    </svg>
+                                </div>
+                                <div class="col">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-search" viewBox="0 0 16 16">
+                                        <path
+                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                    <!-- <svg aria-hidden="true" focusable="false" role="presentation"
+                                        class="icon icon-search" viewBox="0 0 64 64">
+                                        <path
+                                            d="M47.16 28.58A18.58 18.58 0 1 1 28.58 10a18.58 18.58 0 0 1 18.58 18.58zM54 54L41.94 42">
+                                        </path>
+                                    </svg> -->
+                                </div>
+                                <div class="col">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-heart" viewBox="0 0 16 16">
+                                        <path
+                                            d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                    </svg>
+                                    <!-- <svg id="camera-svg" width="28" height="28" viewBox="0 0 256 256" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M208 58H179.21L165 36.67C164.451 35.8474 163.707 35.1732 162.835 34.7073C161.963 34.2415 160.989 33.9985 160 34H96C95.0111 33.9985 94.0372 34.2415 93.1648 34.7073C92.2925 35.1732 91.5488 35.8474 91 36.67L76.78 58H48C42.1652 58 36.5694 60.3179 32.4436 64.4437C28.3178 68.5695 26 74.1652 26 80V192C26 197.835 28.3178 203.431 32.4436 207.556C36.5694 211.682 42.1652 214 48 214H208C213.835 214 219.431 211.682 223.556 207.556C227.682 203.431 230 197.835 230 192V80C230 74.1652 227.682 68.5695 223.556 64.4437C219.431 60.3179 213.835 58 208 58ZM218 192C218 194.652 216.946 197.196 215.071 199.071C213.196 200.946 210.652 202 208 202H48C45.3478 202 42.8043 200.946 40.9289 199.071C39.0536 197.196 38 194.652 38 192V80C38 77.3478 39.0536 74.8043 40.9289 72.9289C42.8043 71.0536 45.3478 70 48 70H80C80.9889 70.0015 81.9628 69.7585 82.8352 69.2927C83.7075 68.8268 84.4512 68.1526 85 67.33L99.21 46H156.78L171 67.33C171.549 68.1526 172.293 68.8268 173.165 69.2927C174.037 69.7585 175.011 70.0015 176 70H208C210.652 70 213.196 71.0536 215.071 72.9289C216.946 74.8043 218 77.3478 218 80V192ZM128 90C119.693 90 111.573 92.4633 104.666 97.0783C97.7592 101.693 92.3759 108.253 89.1971 115.927C86.0182 123.602 85.1864 132.047 86.807 140.194C88.4276 148.341 92.4277 155.825 98.3015 161.698C104.175 167.572 111.659 171.572 119.806 173.193C127.953 174.814 136.398 173.982 144.073 170.803C151.747 167.624 158.307 162.241 162.922 155.334C167.537 148.427 170 140.307 170 132C170 120.861 165.575 110.178 157.698 102.302C149.822 94.425 139.139 90 128 90ZM128 162C122.067 162 116.266 160.241 111.333 156.944C106.399 153.648 102.554 148.962 100.284 143.481C98.013 137.999 97.4189 131.967 98.5764 126.147C99.734 120.328 102.591 114.982 106.787 110.787C110.982 106.591 116.328 103.734 122.147 102.576C127.967 101.419 133.999 102.013 139.48 104.284C144.962 106.554 149.648 110.399 152.944 115.333C156.241 120.266 158 126.067 158 132C158 139.957 154.839 147.587 149.213 153.213C143.587 158.839 135.956 162 128 162Z"
+                                            fill="black" style="fill: rgb(0, 0, 0);"></path>
+                                    </svg> -->
+                                </div>
+                                <div class="col">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-bag" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                    </svg>
+                                    <!-- <svg aria-hidden="true" focusable="false" role="presentation"
+                                        class="icon icon-bag-minimal" viewBox="0 0 64 64">
+                                        <path stroke="null" id="svg_4" fill-opacity="null" stroke-opacity="null"
+                                            fill="null" d="M11.375 17.863h41.25v36.75h-41.25z"></path>
+                                        <path stroke="null" id="svg_2"
+                                            d="M22.25 18c0-7.105 4.35-9 9.75-9s9.75 1.895 9.75 9"></path>
+                                    </svg> -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-user" viewBox="0 0 64 64">
+                        <path d="M35 39.84v-2.53c3.3-1.91 6-6.66 6-11.41 0-7.63 0-13.82-9-13.82s-9 6.19-9 13.82c0 4.75 2.7 9.51 6 11.41v2.53c-10.18.85-18 6-18 12.16h42c0-6.19-7.82-11.31-18-12.16z"></path>
+                    </svg> -->
+                </div>
+            </div>
+        </nav>
+        <!-- <nav>
+            <div class="navbar">
+              <div class="container nav-container">
+                 <input class="checkbox" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" type="button"/>
+                  <div class="hamburger-lines">
+                    <span class="line line1"></span>
+                    <span class="line line2"></span>
+                    <span class="line line3"></span>
+                  </div>  
+               
+              </div>
+            </div>
+          </nav> -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+            aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                  </svg> LOGIN </h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="list-group border-top-0 ">
+                    <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                      NEW ARRIVALS
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" id="list-tab">BEST SELLER</a>
+                    <a href="#" class="list-group-item list-group-item-action" id="list-tab">SHOP</a>
+                    <a href="#" class="list-group-item list-group-item-action">TRACK ORDER</a>
+                    <a href="#" class="list-group-item list-group-item-action">PLACE A RETURN/ EXCHANGE REQUEST</a>
+                    <a href="#" class="list-group-item list-group-item-action">CUSTOMER SUPPORT</a>
+                    <a href="#" class="list-group-item list-group-item-action">VISIT STORE</a>
+                    <a href="#" class="list-group-item list-group-item-action">RELOVE</a>
+                    <ul class="list-group list-group-horizontal mt-3 ">
+                        <li class="list-group-item ml-6"><i class="fab fa-instagram"></i
+                            ></li>
+                        <li class="list-group-item "><i class="fab fa-facebook-f"></i
+                            ></li>
+                        <li class="list-group-item --Grid"><i class="fab fa-twitter"></i></li>
+                      </ul>
+                      <ul class="list-group list-group-horizontal">
+
+                        <li class="list-group-item"><i class="fab fa-youtube"></i
+                            ></li>
+                        <li class="list-group-item"><i class="fab fa-pinterest"></i
+                            ></li>
+                        <li class="list-group-item --Grid"><i class="fab fa-linkedin"></i
+                            ></li>
+                      </ul>
+
+                  </div>
+                <!-- <div class="dropdown mt-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown">
+                        Dropdown button
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">asd</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <!-- this content section -->
+
+    <section>
+        <p class="text-center fs-1">BLOGS</p>
+        <div class="container-fluid p-md-5">
+            <div class="row p-md-1">
+                {% for post in posts %}
+                <div class="col-lg-4 col-md-4">
+                    <div class="blog-item">
+                        <img src="{{ post.image.url }}" alt="" onclick="window.location='{% url 'blog_detail' post.id %}'" class="image-element cursor blogImg">
+                        <div class="small">
+                            <p class="fs-6 text-sm-center p-3 fw-lighter date">22 apr 2013</p>
+                            <a href="" class="text-dark text-decoration-none text-lg-start cursor">{{post.title}}</a>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div></div><div class="container-fluid p-md-5"><div class="row p-md-1">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+  
+    <!-- Footer -->
+    <hr>
+    <footer class="text-center text-lg-start text-black sxs"
+            style="background-color: white ">
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: Links -->
+        <section class="">
+          <!--Grid row-->
+          <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold ">
+                VISIT OFFLINE STORE
+              </h6>
+              <p>
+                Jayanagar, Banglore: <br>
+                <a href="#" class="text-dark">Get Directions</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                <p><a href="#" class="text-dark no-underline"> Contact Us</a></p>
+                <p><a href="#" class="text-dark no-underline"> FAQ</a></p>
+                <p><a href="blogs.html" class="text-dark no-underline">Blogs</a></p>
+                <p><a href="#" class="text-dark no-underline">Terms & Conditions</a></p>
+              </div>
+            <!-- Grid column -->
+  
+            <hr class="w-100 clearfix d-md-none" />
+  
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">             
+              <p><a href="#" class="text-dark no-underline"> PLACE RETURN/ EXCHANGE REQUEST</a></p>
+              <p><a href="#" class="text-dark no-underline" > RETURNS/EXCHANGE POLICY</a></p>
+              <p><a href="#" class="text-dark no-underline"> TRACK YOUR ORDER</a></p>
+            </div>
+            <!-- Grid column -->
+  
+            <hr class="w-100 clearfix d-md-none" />
+  
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">
+                CUSTOMER CARE
+              </h6>
+              <p>
+                Timings: 10AM-6:00PM <br> (Mon - Sat)
+              </p>
+              <p>
+                Call:<a href="#" class="text-dark ">+91 6364430800</a>
+              </p>
+              <p>
+                E-mail: <a href="#" class="text-dark" >support@snitch.co.in</a>
+              </p>
+              
+            </div>
+  
+            <!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none" />
+  
+            
+            <!-- Grid column -->
+          </div>
+          <!--Grid row-->
+        </section>
+        <!-- Section: Links -->
+  
+        <hr class="my-3">
+
+        <h6 class="text-uppercase mb-4 font-weight-bold">
+            SIGN UP AND SAVE
+          </h6>
+          <p>Sign up now and be the first to know about exclusive offers, latest fashion trends & style tips!</p>
+          <div class="input-group mb-3">
+          <input type="email" class="form-control underlined-input border-top-0 border-start-0 border-end-0 border-dark" id="input"  placeholder="Enter your email">
+          <button class="btn btn-no-border" type="button" id="button-addon2">Subscribe</button>
+        </div>
+        <section class="mb-4">
+            <!-- Instagram -->
+            <a
+        class="btn btn-link btn-floating btn-lg text-dark m-1"
+        href="#!"
+        role="button"
+        data-mdb-ripple-color="dark"
+        ><i class="fab fa-instagram"></i
+      ></a>
+            <!-- Facebook -->
+            <a
+        class="btn btn-link btn-floating btn-lg text-dark m-1"
+        href="#!"
+        role="button"
+        data-mdb-ripple-color="dark"
+        ><i class="fab fa-facebook-f"></i
+      ></a>
+      <!-- Youtube -->
+      <a
+        class="btn btn-link btn-floating btn-lg text-dark m-1"
+        href="#!"
+        role="button"
+        data-mdb-ripple-color="dark"
+        ><i class="fab fa-youtube"></i
+      ></a>
+
+          <!-- Twitter -->
+          <a
+          class="btn btn-link btn-floating btn-lg text-dark m-1"
+          href="#!"
+          role="button"
+          data-mdb-ripple-color="dark"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <!-- pintrest -->
+        <a
+        class="btn btn-link btn-floating btn-lg text-dark m-1"
+        href="#!"
+        role="button"
+        data-mdb-ripple-color="dark"
+        ><i class="fab fa-pinterest"></i
+      ></a>
+      <!-- linkedin -->
+      <a
+        class="btn btn-link btn-floating btn-lg text-dark m-1"
+        href="#!"
+        role="button"
+        data-mdb-ripple-color="dark"
+        ><i class="fab fa-linkedin"></i
+      ></a>
+        </section>
+        
+
+
+
+  
+        <!-- Section: Copyright -->
+        <section class="p-3 pt-0">
+          <div class="row d-flex align-items-center">
+            <!-- Grid column -->
+            <div class="col-md-7 col-lg-8 text-center text-md-start">
+              <!-- Copyright -->
+              <div class="p-3 text-md-end" >
+
+                © 2023 SNITCH | All Rights Reserved
+                
+              </div>
+              
+            </div>
+           
+             
+            </div>
+            
+          </div>
+        </section>
+        
+    </footer>
+    <!-- Footer -->
+  </div>
+  <!-- End of .container -->
+
+ <!-- Bootstrap JavaScript (required for Bootstrap) -->
+
+        
+    </section>
+</div>
+
+    
+    
+
+   
+
+
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <script>
+        window.addEventListener('scroll', function () {
+            var navbar = document.querySelector('.navbar');
+            if (window.scrollY > 0) {
+                navbar.classList.add('sticky', 'reveal');
+                // Optionally, you can remove the animation class after the animation is complete
+                setTimeout(function () {
+                    navbar.classList.remove('animation');
+                }, 500); // Adjust the duration (500ms) to match your animation time
+            } else {
+                navbar.classList.remove('reveal');
+            }
+            if (window.scrollY == 0) {
+                navbar.classList.remove('reveal');
+                setTimeout(function () {
+                    navbar.classList.remove('sticky');
+                }, 400);
+            }
+        });
+    </script>
+</body>
+
+</html>

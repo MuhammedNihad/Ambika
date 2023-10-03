@@ -10,6 +10,7 @@ class Customer(models.Model):
         return self.name
 class Category(models.Model):
     name=models.CharField(max_length=100,unique=True)
+    image=models.ImageField(upload_to='categoryimage/',null=True,blank=True)
     def __str__(self) -> str:
         return self.name
 class Product(models.Model):
@@ -20,6 +21,7 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True)
     colour_colour = ColorField()
     sizes = models.ManyToManyField('Size', through='ProductSize')
+    views=models.PositiveIntegerField(default=0)
     def __str__(self):
         return self.name
 class Size(models.Model):
@@ -59,15 +61,17 @@ class OrderItem(models.Model):
 class PlacedOrders(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    size = models.CharField(max_length=3, choices=Size.SIZE_CHOICES, null=True)
     address = models.CharField(max_length=200, null=False)
     city = models.CharField(max_length=200, null=False)
     state = models.CharField(max_length=200, null=False)
     zipcode = models.CharField(max_length=200, null=False)
     date_added = models.DateTimeField(auto_now_add=True)
-    order_items = models.ManyToManyField(OrderItem, related_name='placed_orders', blank=True)  # Use related_name
+    total_amount=models.FloatField(blank=True,null=True)
+    phone_number = models.CharField(max_length=200, null=True, blank=True)
 
-    def __str__(self):
-        return f"Placed Order ID: {self.id}"
 
 class ProductReview(models.Model):
     order = models.ForeignKey(PlacedOrders, on_delete=models.SET_NULL, null=True)
@@ -81,3 +85,5 @@ class Blog(models.Model):
     content=models.TextField()
     image=models.ImageField(null=True,blank=True)
     conclusion=models.TextField()
+    def __str__(self) -> str:
+        return self.title

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phone Verification</title>
+</head>
+<body>
+    <h1>Phone Verification</h1>
+    <form method="post" action="{% url 'send_sms_verification' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send OTP</button>
+    </form>
+</body>
+</html>

@@ -1,29 +1,29 @@
-<h1>Placed Orders</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Placed Orders</title>
+</head>
+<body>
+  <h1>Placed Orders</h1>
 
-{% if placed_orders %}
+  <h3>
+    {% if placed_orders %}
+    {{ placed_orders.address}}
+    {% endif %}
+  </h3>  
+ 
   <ul>
     {% for placed_order in placed_orders %}
       <li>
-        <p>Order ID: {{ placed_order.id }}</p>
-        <p>Address: {{ placed_order.address }}</p>
-        <p>City: {{ placed_order.city }}</p>
-        <p>State: {{ placed_order.state }}</p>
-        <p>Zipcode: {{ placed_order.zipcode }}</p>
-        <p>Date Added: {{ placed_order.date_added }}</p>
 
-        <h2>Order Items:</h2>
-        <ul>
-          {% for order_item in placed_order.order_items.all %}
-            <li>
-              <p>Product: {{ order_item.product.name }}</p>
-              <p>Size: {{ order_item.size }}</p>
-              <p>Quantity: {{ order_item.quantity }}</p>
-            </li>
-          {% endfor %}
-        </ul>
+        Customer: {{ placed_order.customer }}<br>
+        Product: {{ placed_order.product }}<br>
+        Quantity: {{ placed_order.quantity }}<br>
+        Size: {{ placed_order.size }}<br>
+  
       </li>
     {% endfor %}
+  
   </ul>
-{% else %}
-  <p>No placed orders yet.</p>
-{% endif %}
+</body>
+</html>

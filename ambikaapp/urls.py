@@ -13,4 +13,9 @@ urlpatterns = [
         path('cart/<str:action>/', views.cart, name='cart'),
          path('place_order/', views.place_order, name='place_order'),
           path('placed_orders/', views.placed_orders, name='placed-orders'),
+           path('sendsms/', views.sendsms, name='sendsms'),
+          path('blog/',views.blog,name='blog'),
+          path('blog_detail/<int:post_id>/', views.blog_detail, name='blog_detail'),
+          path('phone_verification/', views.send_sms_verification, name='send_sms_verification'),
+           path('trending/', views.trending_page, name='trending-page'),
 ]
