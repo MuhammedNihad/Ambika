@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+
 from colorfield.fields import ColorField
-# Create your models here.
+
+
+
 class Customer(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, null=True)
@@ -47,6 +51,7 @@ class Order(models.Model):
     def __str__(self):
         return f"ID:{self.id}Customer name: {self.customer},Date Ordered :{self.date_ordered}"
 class OrderItem(models.Model):
+    add_on = models.ManyToManyField("AddOn", related_name="add_ons", blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True) 
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
@@ -81,3 +86,28 @@ class Blog(models.Model):
     content=models.TextField()
     image=models.ImageField(null=True,blank=True)
     conclusion=models.TextField()
+
+
+class AddOn(models.Model):
+    """
+    Represents an additional item as "add-ons" that can be added to an order item.
+
+    Attributes:
+        name (str): The name of the Add-on.
+        price (Decimal): The price of the Add-on. If not specified, it defaults to 0.00.
+        order_items (ManyToManyField): A many-to-many relationship with the OrderItem model,
+            allowing this Add-on to be associated with multiple order items.
+    """
+
+    name = models.CharField(_("Name of Add-on"), max_length=255)
+    price = models.DecimalField(
+        _("Price of Add-on"),
+        default=0.00,
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return f"{self.name}"

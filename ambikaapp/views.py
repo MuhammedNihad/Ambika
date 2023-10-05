@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import json
 # Create your views here.
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,OrderItem,Order,PlacedOrders
+from .models import Product,OrderItem,Order,PlacedOrders, AddOn, Customer
 from .forms import ProductForm,PlaceOrderForm
 def all_products(request):
 	products = Product.objects.all()#get all products
@@ -74,6 +74,7 @@ def add_to_cart(request):
 
 	return JsonResponse({'error': 'Invalid request'})
 def cart(request, action=None):
+	add_ons = AddOn.objects.all()
 	if request.user.is_authenticated:
 		# User is authenticated, retrieve cart items associated with the user
 		user = request.user
@@ -146,6 +147,7 @@ def cart(request, action=None):
 			return JsonResponse({'message': 'Product removed from cart successfully.'})
 
 	context = {
+		'add_ons': add_ons,
 		'order_items': order_items,
 		'total_amount': total_amount,
 	}
@@ -203,6 +205,35 @@ def update_quantity(request):
 					'message': 'Item not found in the cart.',
 				}
 				return JsonResponse(response_data, status=404)
+
+def update_addon(request):
+	if request.method == 'POST':
+		# Deserialize the JSON data from the request body
+		data = json.loads(request.body.decode('utf-8'))
+		orderitem_id = data.get('orderitem_id')
+		addon_id = data.get('addon_id')
+
+		# Fetch the OrderItem and with the associated Customer
+		order_item = get_object_or_404(OrderItem, pk=orderitem_id)
+		customer = order_item.customer
+
+		if request.user.is_authenticated and request.user == customer.user:
+			addon = get_object_or_404(AddOn, id=addon_id)
+
+			# Check if the addon is already associated with the order_item
+			if addon in order_item.add_on.all():
+				# Remove the addon from the order_item's ManyToMany relationship
+				order_item.add_on.remove(addon)
+				return JsonResponse({"success": True, "message": "Addon removed successfully."}, status=200)
+			else:
+				# Associate the addon with the order_item
+				order_item.add_on.add(addon)
+				return JsonResponse({"success": True, "message": "Addon associated successfully."}, status=200)
+		else:
+			pass
+	else:
+		return JsonResponse({"success": False, "message": "Method not allowed."}, status=405)
+
 def place_order(request):
     if request.method == 'POST':
         form = PlaceOrderForm(request.POST)
