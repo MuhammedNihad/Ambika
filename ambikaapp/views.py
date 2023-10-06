@@ -91,6 +91,7 @@ def cart(request, action=None):
 			quantity = item_data.get('quantity', 0)
 			size = item_data.get('size', '')
 			order_items.append({
+				'id': product.id,
 				'product': product,
 				'quantity': quantity,
 				'size': size,
