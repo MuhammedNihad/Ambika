@@ -30,7 +30,7 @@ Your Cart
 			<td class="price" data-id="{{ order_item.id }}" data-price="{{ order_item.product.price }}">₹{{ order_item.product.price }}</td>
 			<td>
 				<button id="showDropdownButton" onClick="toggleAddOnDropdown({{ order_item.id }})">Choose Add-ons</button>
-				<select id="dropdown-{{ order_item.id }}" name"addons" style="display: none;" multiple>
+				<select id="dropdown-{{ order_item.id }}" name="addons" style="display: none;" multiple>
 					{% for addon_item in add_ons.all %}
 						<option value="{{ addon_item.id }}" onClick="updateAddOn({{ order_item.id }}, {{ addon_item.id }})">{{ addon_item.name }} - {{ addon_item.price }}</option>
 					{% endfor %}
