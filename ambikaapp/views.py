@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import json
 # Create your views here.
 from django.shortcuts import render,get_object_or_404,redirect
+from django.views.decorators.http import require_http_methods
 from .models import Product,OrderItem,Order,PlacedOrders, AddOn, Customer
 from .forms import ProductForm,PlaceOrderForm
 def all_products(request):
@@ -207,16 +208,23 @@ def update_quantity(request):
 				}
 				return JsonResponse(response_data, status=404)
 
+@require_http_methods(["POST"])
 def update_addon(request):
-	if request.method == 'POST':
+	try:
 		# Deserialize the JSON data from the request body
 		data = json.loads(request.body.decode('utf-8'))
 		orderitem_id = data.get('orderitem_id')
 		addon_id = data.get('addon_id')
 
+		# Input validation
+		if not orderitem_id or not addon_id:
+			return JsonResponse({"success": False, "message": "Invalid input data."}, status=400)
+
 		if request.user.is_authenticated:
 			order_item = get_object_or_404(OrderItem, pk=orderitem_id)
 			customer = order_item.customer
+
+			# Check if the user is associated with the customer object
 			if request.user == customer.user:
 				# Fetch the OrderItem and with the associated Customer
 				addon = get_object_or_404(AddOn, id=addon_id)
@@ -245,21 +253,23 @@ def update_addon(request):
 				else:
 					addon_list = cart_session[str(product_id)]['list-of-addons']
 					value_found = False
+
 					# Iterate through the list and check 'addonid' in each dictionary
 					for dictionary in addon_list:
 						if 'addonid' in dictionary and dictionary['addonid'] == addon_id:
 							value_found = True
 							break
+
 					if value_found:
 						addon_list.remove({"addonid": addon_id})
 					else:
 						addon_list.append({"addonid": addon_id})
+
 				# Save the session to persist the changes
 				request.session.save()
 				return JsonResponse({"success": True, "message": "Add-on updated for given cart item"}, status=200)
-
-	else:
-		return JsonResponse({"success": False, "message": "Method not allowed."}, status=405)
+	except Exception as e:
+		return JsonResponse({"success": False, "message": "An error occurred while processing the request.", "error": e}, status=500)
 
 def place_order(request):
     if request.method == 'POST':
