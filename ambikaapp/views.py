@@ -214,24 +214,50 @@ def update_addon(request):
 		orderitem_id = data.get('orderitem_id')
 		addon_id = data.get('addon_id')
 
-		# Fetch the OrderItem and with the associated Customer
-		order_item = get_object_or_404(OrderItem, pk=orderitem_id)
-		customer = order_item.customer
+		if request.user.is_authenticated:
+			order_item = get_object_or_404(OrderItem, pk=orderitem_id)
+			customer = order_item.customer
+			if request.user == customer.user:
+				# Fetch the OrderItem and with the associated Customer
+				addon = get_object_or_404(AddOn, id=addon_id)
 
-		if request.user.is_authenticated and request.user == customer.user:
-			addon = get_object_or_404(AddOn, id=addon_id)
-
-			# Check if the addon is already associated with the order_item
-			if addon in order_item.add_on.all():
-				# Remove the addon from the order_item's ManyToMany relationship
-				order_item.add_on.remove(addon)
-				return JsonResponse({"success": True, "message": "Addon removed successfully."}, status=200)
-			else:
-				# Associate the addon with the order_item
-				order_item.add_on.add(addon)
-				return JsonResponse({"success": True, "message": "Addon associated successfully."}, status=200)
+				# Check if the addon is already associated with the order_item
+				if addon in order_item.add_on.all():
+					# Remove the addon from the order_item's ManyToMany relationship
+					order_item.add_on.remove(addon)
+					return JsonResponse({"success": True, "message": "Addon removed successfully."}, status=200)
+				else:
+					# Associate the addon with the order_item
+					order_item.add_on.add(addon)
+					return JsonResponse({"success": True, "message": "Addon associated successfully."}, status=200)
+			return JsonResponse({"success": False, "message": "User is not associated with customer object."}, status=403)
 		else:
-			pass
+			# For unauthenticated users, the 'orderitem_id' variable should contain the Product ID sent from the frontend,
+			# as they intentionally do not have access to the 'OrderItem' model object.
+			product_id = orderitem_id
+			cart_session = request.session.get('cart', {})
+
+			if str(product_id) not in cart_session.keys():
+				return JsonResponse({"success": False, "message": "Given product is not found in cart"}, status=400)
+			else:
+				if "list-of-addons" not in cart_session[str(product_id)] or cart_session[str(product_id)]['list-of-addons'] == []:
+					cart_session[str(product_id)]['list-of-addons'] = [{"addonid": addon_id}]
+				else:
+					addon_list = cart_session[str(product_id)]['list-of-addons']
+					value_found = False
+					# Iterate through the list and check 'addonid' in each dictionary
+					for dictionary in addon_list:
+						if 'addonid' in dictionary and dictionary['addonid'] == addon_id:
+							value_found = True
+							break
+					if value_found:
+						addon_list.remove({"addonid": addon_id})
+					else:
+						addon_list.append({"addonid": addon_id})
+				# Save the session to persist the changes
+				request.session.save()
+				return JsonResponse({"success": True, "message": "Add-on updated for given cart item"}, status=200)
+
 	else:
 		return JsonResponse({"success": False, "message": "Method not allowed."}, status=405)
 
