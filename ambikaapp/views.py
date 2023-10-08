@@ -105,8 +105,15 @@ def cart(request, action=None):
 				'total_price': product.price * quantity,
 			})
 
-		# Calculate the price of products and their addon price in the cart
-		total_addon_price_in_cart = sum(addon['price'] for item in cart_session.values() for addon in item['list-of-addons'])
+		# Calculate the total addon price in the cart;
+		# 'list-of-addons' is only present when addons are added to a product in the cart.
+		# If 'list-of-addons' is absent, consider the total addon price as 0.
+		# Otherwise, iterate through each item in the cart_session and their respective addons to sum up the prices.
+		total_addon_price_in_cart = sum(
+			addon['price'] if 'list-of-addons' in item else 0
+			for item in cart_session.values()
+			for addon in item.get('list-of-addons', []))
+
 		total_amount = sum(item['total_price'] for item in order_items)
 		total_amount += float(total_addon_price_in_cart)
 
