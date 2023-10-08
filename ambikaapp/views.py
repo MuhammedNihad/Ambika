@@ -255,6 +255,9 @@ def update_addon(request):
 			cart_session = request.session.get('cart', {})
 			addon_price = data.get('addon_price')
 
+			if not addon_price:
+				return JsonResponse({"success": False, "message": "Invalid price input"}, status=400)
+
 			if str(product_id) not in cart_session.keys():
 				return JsonResponse({"success": False, "message": "Given product is not found in cart"}, status=400)
 			else:
