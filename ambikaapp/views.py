@@ -81,7 +81,13 @@ def cart(request, action=None):
 		user = request.user
 		cart, created = Order.objects.get_or_create(customer=user.customer, complete=False)
 		order_items = cart.orderitem_set.all()
+
+		# Calculate the price of products and their addon price in the cart
+		total_addon_price_in_cart = sum(sum(addon_item.price for addon_item in order_item.add_on.all()) for order_item in order_items)
 		total_amount = sum(item.product.price * item.quantity for item in order_items)
+
+		# Add total_addon_price_in_cart to total_amount
+		total_amount += float(total_addon_price_in_cart)
 	else:
 		# User is not authenticated, retrieve cart items from the session
 		cart_session = request.session.get('cart', {})
@@ -99,7 +105,10 @@ def cart(request, action=None):
 				'total_price': product.price * quantity,
 			})
 
+		# Calculate the price of products and their addon price in the cart
+		total_addon_price_in_cart = sum(addon['price'] for item in cart_session.values() for addon in item['list-of-addons'])
 		total_amount = sum(item['total_price'] for item in order_items)
+		total_amount += float(total_addon_price_in_cart)
 
 	if action == 'increment':
 		product_id = request.POST.get('product_id')
@@ -244,12 +253,13 @@ def update_addon(request):
 			# as they intentionally do not have access to the 'OrderItem' model object.
 			product_id = orderitem_id
 			cart_session = request.session.get('cart', {})
+			addon_price = data.get('addon_price')
 
 			if str(product_id) not in cart_session.keys():
 				return JsonResponse({"success": False, "message": "Given product is not found in cart"}, status=400)
 			else:
 				if "list-of-addons" not in cart_session[str(product_id)] or cart_session[str(product_id)]['list-of-addons'] == []:
-					cart_session[str(product_id)]['list-of-addons'] = [{"addonid": addon_id}]
+					cart_session[str(product_id)]['list-of-addons'] = [{"addonid": addon_id, "price": addon_price}]
 				else:
 					addon_list = cart_session[str(product_id)]['list-of-addons']
 					value_found = False
@@ -261,9 +271,9 @@ def update_addon(request):
 							break
 
 					if value_found:
-						addon_list.remove({"addonid": addon_id})
+						addon_list.remove({"addonid": addon_id, "price": addon_price})
 					else:
-						addon_list.append({"addonid": addon_id})
+						addon_list.append({"addonid": addon_id, "price": addon_price})
 
 				# Save the session to persist the changes
 				request.session.save()

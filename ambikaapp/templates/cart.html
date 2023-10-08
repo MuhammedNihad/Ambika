@@ -32,7 +32,7 @@ Your Cart
 				<button id="showDropdownButton" onClick="toggleAddOnDropdown({{ order_item.id }})">Choose Add-ons</button>
 				<select id="dropdown-{{ order_item.id }}" name="addons" style="display: none;" multiple>
 					{% for addon_item in add_ons.all %}
-						<option value="{{ addon_item.id }}" onClick="updateAddOn({{ order_item.id }}, {{ addon_item.id }})">{{ addon_item.name }} - {{ addon_item.price }}</option>
+						<option value="{{ addon_item.id }}" onClick="updateAddOn({{ order_item.id }}, {{ addon_item.id }}, {{ addon_item.price }})">{{ addon_item.name }} - {{ addon_item.price }}</option>
 					{% endfor %}
 				</select>
 			</td>
@@ -46,10 +46,11 @@ Your Cart
 		var dropdown = document.getElementById("dropdown-"+orderItemId);
 		dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
 	}
-	function updateAddOn(orderItemId, addOnId) {
+	function updateAddOn(orderItemId, addOnId, addOnPrice) {
 		const data = {
 			'orderitem_id': orderItemId,
 			'addon_id': addOnId,
+			'addon_price': addOnPrice,
 		};
 
 		fetch('/update_addon/', {
