@@ -1,0 +1,573 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best seller</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'assets/bestseller.css' %}">
+</head>
+<body>
+  <div class="container-fluid my-5">
+    <div class="row">  
+        <!------------------------- sidebar --------------------->
+        <div class="col-6 col-md-3 col-lg-3">
+          <div class="fixed-sidebar">
+            <div class="accordion" id="accordionExample">
+              <!-- Collections Section -->
+              <form method="get" action="">
+                <!-- Your other form elements here -->
+            
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="categoryHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="true" aria-controls="categoryCollapse">
+                            Category
+                        </button>
+                    </h2>
+                    <div id="categoryCollapse" class="accordion-collapse collapse show" aria-labelledby="categoryHeading">
+                        <div class="accordion-body">
+                            <div class="overflow-auto" style="max-height: 200px;">
+                                {% for category in categories %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="category{{ category.id }}" name="category" value="{{ category.id }}"
+                                            {% if category.id in selected_categories %} checked {% endif %} onchange="filterProducts()">
+                                        <label class="form-check-label"> {{ category.name }} </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            
+              <!-- Size Section -->
+              <form method="get" action="">
+                <!-- Your other form elements here -->
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="sizeHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sizeCollapse" aria-expanded="true" aria-controls="sizeCollapse" id="btn">
+                            Size
+                        </button>
+                    </h2>
+                    <div id="sizeCollapse" class="accordion-collapse collapse show" aria-labelledby="sizeHeading">
+                        <div class="accordion-body">
+                            <div class="overflow-auto" style="max-height: 200px;">
+                                {% for size in sizes %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkbox{{ size.id }}" name="size" value="{{ size.size }}"
+                                               {% if size.size in selected_sizes %} checked {% endif %}
+                                               onchange="filterProducts()">
+                                        <label class="form-check-label"> {{ size.size }} </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+
+
+            
+              <!-------------------- fit section --------------------- -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="fitHeading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fitCollapse" aria-expanded="true" aria-controls="fitCollapse" id="btn">
+                    Fit
+                  </button>
+                </h2>
+                <div id="fitCollapse" class="accordion-collapse collapse show" aria-labelledby="fitHeading">
+                  <div class="accordion-body">
+                    <div class="overflow-auto" style="max-height: 200px;">
+                   
+                    <!-- Add more fit options here as needed -->
+                    <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label">SLIM FIT  </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label">SKINNY FIT  </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> BAGGY FIT </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label">BOOT FIT  </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label">OVERSIZED FIT  </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> CUSTOM FIT </label>  
+                     </div>
+
+
+                  </div>
+                </div>
+              </div>
+              </div>
+              <!-------------------pattern section ----------------- -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="patternHeading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#patternCollapse" aria-expanded="true" aria-controls="patternCollapse" id="btn">
+                    Pattern
+                  </button>
+                </h2>
+                <div id="patternCollapse" class="accordion-collapse collapse show" aria-labelledby="patternHeading">
+                  <div class="accordion-body">
+                    <div class="overflow-auto" style="max-height: 200px;">
+                    
+                    <!-- Add more pattern options here as needed -->
+                    <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> PRINTED </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> CHECKS </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> PLAIN </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> STRIPES </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> FLORAL </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> GRAPHIC </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> EMBROIDERY </label>  
+                     </div>
+                 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-------------------- color section --------------------- -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="colorHeading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#colorCollapse" aria-expanded="true" aria-controls="colorCollapse" id="btn">
+                    Color
+                  </button>
+                </h2>
+                <div id="colorCollapse" class="accordion-collapse collapse show" aria-labelledby="colorHeading">
+                  <div class="accordion-body">
+                    
+                    <!-- Add more color options here as needed -->
+                    <div class="overflow-auto" style="max-height: 200px;">
+                      <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> LAVENDER </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> NAVY </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> BLACK </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> BLUE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> GREEN </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> BEIGE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> OLIVE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> PURPLE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> WINE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> WHITE </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> KHAKI </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> CREAM </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> BROWN </label>  
+                         </div><div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> MAROON </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> MUSTARD </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> GREY </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> YELLOW </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> PINK </label>  
+                         </div>
+                         <div class = "form-check">  
+                          <input class = "form-check-input"   
+                        type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                          <label class="form-check-label"> RED </label>  
+                         </div>
+                     </div>
+                 </div>
+                </div>
+              </div>
+              <!----------------- price section ----------------- -->
+              <form action="" method="get">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="priceHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#priceCollapse" aria-expanded="true" aria-controls="priceCollapse">
+                            Price (Rs.)
+                        </button>
+                    </h2>
+                    <div id="priceCollapse" class="accordion-collapse collapse show" aria-labelledby="priceHeading">
+                        <div class="accordion-body">
+                            <div class="overflow-auto" style="max-height: 200px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="priceOption1" name="price_range" value="under_999" onchange="filterProducts()" {% if 'under_999' in selected_price_ranges %}checked{% endif %}>
+                                    <label class="form-check-label">Under Rs. 999</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="priceOption2" name="price_range" value="999" onchange="filterProducts()" {% if '999' in selected_price_ranges %}checked{% endif %}>
+                                    <label class="form-check-label">Rs. 999</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="priceOption3" name="price_range" value="999_1499" onchange="filterProducts()" {% if '999_1499' in selected_price_ranges %}checked{% endif %}>
+                                    <label class="form-check-label">Rs. 999 - Rs. 1,499</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="priceOption4" name="price_range" value="1499_1999" onchange="filterProducts()" {% if '1499_1999' in selected_price_ranges %}checked{% endif %}>
+                                    <label class="form-check-label">Rs. 1,499 - Rs. 1,999</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="priceOption5" name="price_range" value="above_1999" onchange="filterProducts()" {% if 'above_1999' in selected_price_ranges %}checked{% endif %}>
+                                    <label class="form-check-label">Above Rs. 1,999</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+              <!--------------------- occassion section ----------------- -->
+              <form method="get" action="">
+                <!-- Your other form elements here -->
+                <!-- Size section -->
+                <div class="accordion-item">
+                    <!-- Size checkboxes here with onchange="filterProducts()" -->
+                </div>
+            
+                <!-- Occasion section -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="occasionHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#occasionCollapse" aria-expanded="true" aria-controls="occasionCollapse" id="btn">
+                            Occasion
+                        </button>
+                    </h2>
+                    <div id="occasionCollapse" class="accordion-collapse collapse show" aria-labelledby="occasionHeading">
+                        <div class="accordion-body">
+                            <div class="overflow-auto" style="max-height: 200px;">
+                                {% for occasion in occasions %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkbox{{ occasion.0 }}" name="occasion" value="{{ occasion.0 }}"
+                                               {% if occasion.0 in selected_occasions %} checked {% endif %}
+                                               onchange="filterProducts()">
+                                        <label class="form-check-label"> {{ occasion.1 }} </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>          
+              <!----------------- sleeves section ------------------------ -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="sleevesHeading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sleevesCollapse" aria-expanded="true" aria-controls="priceCollapse" id="btn">
+                    Sleeves
+                  </button>
+                </h2>
+                <div id="sleevesCollapse" class="accordion-collapse collapse show" aria-labelledby="sleevesHeading">
+                  <div class="accordion-body">
+                    <div class="overflow-auto" style="max-height: 200px;">
+                    <div class="form-check">  
+                      <input class="form-check-input" type="checkbox" id="checkbox1" name="option1" value="good">  
+                      <label class="form-check-label">FULL SLEEVES  </label>  
+                    </div>
+                    <!-- Add more sleeves options here as needed -->
+                    <div class="form-check">  
+                      <input class="form-check-input" type="checkbox" id="checkbox1" name="option1" value="good">  
+                      <label class="form-check-label">HALF SLEEVES  </label>  
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+              </div>
+              <!-- --------------------neck/collar section ---------------------- -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="neckHeading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#neckCollapse" aria-expanded="true" aria-controls="neckCollapse" id="btn">
+                    Neck / Collar
+                  </button>
+                </h2>
+                <div id="neckCollapse" class="accordion-collapse collapse show" aria-labelledby="neckHeading">
+                  <div class="accordion-body">
+                    <div class="overflow-auto" style="max-height: 200px;">
+                  
+                    <!-- Add more options here as needed -->
+                    <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> BUTTON DOWN COLLAR </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> SPREAD COLLAR </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> CUBAN COLLAR </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> CREW NECK </label>  
+                     </div>
+                     <div class = "form-check">  
+                      <input class = "form-check-input"   
+                    type = "checkbox" id = "checkbox1" name="option1" value="good" >  
+                      <label class="form-check-label"> POLO </label>  
+                     </div>
+
+
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            
+            <!-- end of sidebar  -->
+
+            <!-- <div class="content">            -->
+ <div class="col-6 col-md-9 col-lg-9"> 
+  <div class="container"> 
+<div class="input-group"><form action="" method="get"></form>
+<input value="{{search_query}}"  type="text" name="q" class="form-control placeholder="Search for products in this collection">
+   <span type="submit" class="input-group-text"><i class="fa fa-search"></i></span>
+</div></form>
+<div class="row my-4">
+<div class="col-sm">
+  206 products   View As
+<!-- <button class="btn btn-outline-secondary add-btn" id="btn1">||</button>
+<button class="btn btn-outline-secondary add-btn" id="btn2">|||</button>
+<button class="btn btn-outline-secondary add-btn" id="btn3">||||</button> -->
+</div>
+<div class="col-sm">
+<div class="dropdown">
+<button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" id="custom">
+     Custom
+</button>
+<ul class="dropdown-menu" id="emi" >
+ <li ><a class="dropdown-item" href="#" >Newly Added</a></li>
+ <li ><a class="dropdown-item" href="#" >Curated For You</a></li>
+ <li ><a class="dropdown-item" href="#" >Best Seller</a></li>
+ <li ><a class="dropdown-item" href="#" >Price (High to Low)</a></li>
+ <li ><a class="dropdown-item" href="#" >Price (Low to High)</a></li>
+ <li ><a class="dropdown-item" href="#" >Relevance</a></li>
+  <li ><a class="dropdown-item" href="#" >Custom</a></li>
+  </ul>
+   </div>
+  </div>
+  </div>
+ 
+    <!---------------------- images------------------- -->
+
+    <!-- ---------first row =--------------->
+    <div class="grid-container mt-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+            {% for product in products %}
+            <div class="col mb-4">
+                <div class="image-container">
+                    <a href="{% url 'single_product' product.id %}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                    </a>
+                    <div class="overlay">
+                        <img src="{{ product.overrelayimage.url }}" alt="{{ product.name }} (Hover)" class="img-fluid">
+                    </div>
+                    <div class="view">
+                        <button type="button" id="viewbtn">Quick view</button>
+                    </div>
+                </div>
+                <p class="text-center">{{ product.name }}</p>
+                <p class="text-center">Rs. {{ product.price }}</p>
+                <div class="size-buttons">
+                    {% for size in product.sizes.all %}
+                    <a href="{% url 'single_product' product.id %}">
+                        <button class="btn btn-outline-secondary add-btn">{{ size.size }}</button>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+<!-- Scroll to top button -->
+<button id="scrollToTopBtn" title="Go to top"><i class="fas fa-chevron-up"></i></button>
+
+ </div></div>
+                </div>
+                <!-- ------------end of row ----------- -->
+              
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="{% static 'assets/bestseller.js' %}"></script>
+    
+</body>
+</html>
+<script>
+  
+  function filterProducts() {
+      var selectedSizes = [];
+      $('input[name="size"]:checked').each(function() {
+          selectedSizes.push($(this).val());
+      });
+
+      var selectedOccasions = [];
+      $('input[name="occasion"]:checked').each(function() {
+          selectedOccasions.push($(this).val());
+      });
+
+      var selectedCategories = [];
+      $('input[name="category"]:checked').each(function() {
+          selectedCategories.push($(this).val());
+      });
+
+      var selectedPriceRanges = [];
+      $('input[name="price_range"]:checked').each(function() {
+          selectedPriceRanges.push($(this).val());
+      });
+
+      // Construct the updated URL with selected sizes, occasions, categories, and price ranges as query parameters
+      var baseUrl = window.location.origin + window.location.pathname;
+      var queryParameters = '';
+
+      if (selectedSizes.length > 0) {
+          queryParameters += 'size=' + selectedSizes.join(',') + '&';
+      }
+      if (selectedOccasions.length > 0) {
+          queryParameters += 'occasion=' + selectedOccasions.join(',') + '&';
+      }
+      if (selectedCategories.length > 0) {
+          queryParameters += 'category=' + selectedCategories.join(',') + '&';
+      }
+      if (selectedPriceRanges.length > 0) {
+          queryParameters += 'price_range=' + selectedPriceRanges.join(',') + '&';
+      }
+
+      // Remove the trailing '&' character, if present
+      if (queryParameters.endsWith('&')) {
+          queryParameters = queryParameters.slice(0, -1);
+      }
+
+      var updatedUrl = baseUrl + '?' + queryParameters;
+
+      // Reload the page with the updated URL
+      window.location.href = updatedUrl;
+  }
+
+  // Add change event listeners to the size, occasion, category, and price range checkboxes
+  $('input[name="size"]').change(function() {
+      filterProducts();
+  });
+  $('input[name="occasion"]').change(function() {
+      filterProducts();
+  });
+  $('input[name="category"]').change(function() {
+      filterProducts();
+  });
+  $('input[name="price_range"]').change(function() {
+      filterProducts();
+  });
+  // Initial filtering when the page loads
+  filterProducts();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

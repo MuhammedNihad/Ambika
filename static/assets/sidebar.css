@@ -165,7 +165,6 @@ body {
 .nav-container input[type="checkbox"]:checked ~ .menu-items {
   transform: translateX(0);
 }
-
 .nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
   transform: rotate(45deg);
 }
@@ -181,3 +180,253 @@ body {
 /* .nav-container input[type="checkbox"]:checked ~ .logo{
   display: none;
 } */
+
+
+
+.sidebar { grid-area: sidebar; }
+.body { grid-area: body; }
+
+/* new shop */
+.marginlefting {
+  margin-left: 60px !important;
+}
+
+.displaynone {
+  display: none !important;
+}
+
+.displayblock {
+  display: block !important;
+}
+
+.sidebar .item i {
+  font-size: 24px;
+  margin-top: -5px !important;
+}
+
+.logo {
+  height: 48px !important;
+  padding: 10px !important;
+}
+
+.logo img {
+  width: 100% !important;
+  height: 38px !important;
+}
+
+.title.item {
+  padding: 0.92857143em 1.14285714em !important;
+}
+
+.dropdown .menu .header {
+  padding-top: 3.9px !important;
+  padding-bottom: 3.9px !important;
+}
+.icon-row{
+  --bs-gutter-x:.2rem !important;
+}
+img {
+  border: 0 none;
+  display: block;
+  max-width: 100%;
+}
+/* carousel overlay button  */
+.overlay-buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.cbtn {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  margin: 10px;
+  transition: opacity 0.3s ease-in-out;
+}
+/* end of carousel overlay button  */
+
+/* body part css  */
+.image-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%; /* Set width to match the default image */
+  height: auto; /* Automatically adjust height */
+  opacity: 0;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+#viewbtn{
+  margin-left: 500px;
+  margin-bottom: 50px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+.border-button {
+  background-color: transparent;
+  color: black;
+  border: 2px solid rgb(195, 193, 193);
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 490px;
+  margin-bottom: 50px;
+  white-space: nowrap;
+}
+.border-button:hover {
+  border: 2px solid black;
+  color: black;
+}
+#text{
+  margin-top: 100px;
+}
+#text1{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+#scent-btn{
+  
+  border: 2px solid rgb(27, 26, 26);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px; 
+  margin-bottom: 50px;
+  margin-left: 100px;
+}
+#sneak-btn{
+  padding: 8px;
+}
+.size-btn{
+  margin-left: 15px;
+}
+.sneak-btn{
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+/* footer image css  */
+#image1{
+  padding: 50px;
+}
+#image2{
+  width: 100%;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#image3{
+  width: 100%;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 10px;
+}
+/* footer css  */
+.no-underline{
+  text-decoration: none;
+}
+.mobile-container .container-fluid{
+  background-color: white;
+  font-size: 7px;
+  height: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#ac, #nw, #ctn, #wl, #bg{
+  text-decoration: none;
+  color: black;
+}
+
+
+@media (max-width: 768px) {
+  
+   #scent-btn{
+    margin-left: auto;
+   }
+   .sneak-btn{
+    margin-left: 120px;
+    margin-bottom: 10px;
+  }
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-right: 500px;
+  }
+  .sneaker{
+    margin-left: 50px;
+  }
+  .sneaker .text-center{
+    text-align: left;
+  }
+  
+  
+   #acicon{
+    margin-left: 5px;
+  }
+  #nwicon{
+    margin-left: 10px;
+  }
+  #ctnicon{margin-left: 10px;}
+  #wlicon{margin-left: 5px;}
+  #bg{margin-left: 3px;}
+  #icon-row{
+    display: none;
+  }
+  .overlay-buttons{
+    flex-direction: row;
+    padding: 1px;
+    font-size: smaller;
+  }
+}
+@media (max-width: 430px){
+  .sneak-btn{
+    margin-left: 50px;
+}
+.sneaker{
+  margin-left: 10px;
+
+}
+.overlay-buttons{
+  flex-direction: row;
+  padding-left: 1px;
+  padding-top: 1px;
+  padding-right: 1px;
+  font-size: 10px;
+  margin-right: 20px;
+  
+}
+}
+   
+  
+
+  

@@ -3,12 +3,13 @@ from django.http import JsonResponse,HttpResponse
 import json
 import twilio.rest as twilio
 import random
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.core.validators import RegexValidator
 # Create your views here.
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,OrderItem,Order,PlacedOrders,Blog,Customer
-from .forms import ProductForm,PlaceOrderForm,PlacedOrdersForm,ShippingForm
+from .models import Product,OrderItem,Order,PlacedOrders,Blog,Customer,Category,ProductSize,Size
+from .forms import ProductForm,PlaceOrderForm,PlacedOrdersForm,ShippingForm,SizeFilterForm
 import os 
 from twilio.rest import Client
 TWILIO_ACCOUNT_SID="AC2aafc7bcbd200fc8adac03cfa8bc8510"
@@ -73,8 +74,102 @@ def sendsms(request):
         return HttpResponse("Invalid request method", status=405)
 
 def all_products(request):
-    products = Product.objects.all()#get all products
-    return render(request, 'all_products.html', {'products': products})
+    products = Product.objects.all()
+    trending_products = Product.objects.order_by('-views')[:10]
+    new_arrivals = Product.objects.order_by('-id')[:10]
+    categories = Category.objects.all()  # Fetch all categories
+
+    context = {
+        'trending_products': trending_products,
+        'new_arrivals': new_arrivals,
+        'products': products,
+        'categories': categories,  # Pass categories to the template
+    }
+    return render(request, 'all_products.html', context)
+def bestseller(request):
+    # Fetch all sizes and occasions
+    sizes = Size.objects.all()
+
+    # Define occasion choices
+    OCCASION_CHOICES = [
+        ('Casual Wear', 'Casual Wear'),
+        ('Comfort Wear', 'Comfort Wear'),
+        ('Street Wear', 'Street Wear'),
+        ('Club Wear', 'Club Wear'),
+        ('Beach Wear', 'Beach Wear'),
+        ('Party Wear', 'Party Wear'),
+        ('Holiday Wear', 'Holiday Wear'),
+        ('Weekend Wear', 'Weekend Wear'),
+        ('College Wear', 'College Wear'),
+        ('Office Wear', 'Office Wear'),
+    ]
+    # Get selected sizes, occasions, and price ranges from the query parameters
+
+    selected_occasions = request.GET.getlist('occasion')
+    selected_categories = request.GET.getlist('category')
+    selected_price_ranges = request.GET.getlist('price_range')
+    search_query = request.GET.get('q')
+    # Initialize the product queryset
+    products = Product.objects.all()
+    selected_categories = request.GET.get('category', '').split(',')
+    selected_categories = [int(cat_id) for cat_id in selected_categories if cat_id.isdigit()]
+    selected_sizes = request.GET.get('size')
+    selected_occasions = request.GET.getlist('occasion') or []
+
+    # ...
+
+    # Filter products based on selected occasions
+    if selected_occasions:
+        products = products.filter(occasions__in=selected_occasions).distinct()
+
+
+    # ...
+
+    # Filter products based on selected sizes
+    if selected_sizes:
+        products = products.filter(sizes__size__in=selected_sizes).distinct()
+
+
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query))
+    # Filter products based on selected sizes
+    # Filter products based on selected categories
+    if selected_categories:
+        products = products.filter(categories__in=selected_categories).distinct()
+
+
+
+    # Filter products based on selected price ranges
+    price_filters = {
+        'under_999': {'price__lt': 999},
+        '999': {'price': 999},
+        '999_1499': {'price__gte': 999, 'price__lte': 1499},
+        '1499_1999': {'price__gte': 1499, 'price__lte': 1999},
+        'above_1999': {'price__gt': 1999},
+    }
+
+    for price_range in selected_price_ranges:
+        if price_range in price_filters:
+            products = products.filter(**price_filters[price_range])
+
+    # Get all categories
+    categories = Category.objects.all()
+
+    context = {
+        'sizes': sizes,
+        'selected_sizes': selected_sizes,
+        'occasions': OCCASION_CHOICES,
+        'selected_occasions': selected_occasions,
+        'products': products,
+        'categories': categories,
+        'selected_categories': selected_categories,
+        'selected_price_ranges': selected_price_ranges,
+        'search_query': search_query,
+    }
+
+    return render(request, 'bestseller.html', context)
+
+
 def trending_page(request):
     # Get a list of products ordered by the 'views' field in descending order
     products = Product.objects.order_by('-views')
@@ -93,8 +188,8 @@ def create_product(request):
     return render(request, 'create_product.html', {'form': form})
 def single_product(request, product_id):
     try:
-        selected_product = get_object_or_404(Product,pk=product_id)
-        selected_product.views=selected_product.views+1
+        selected_product = get_object_or_404(Product, pk=product_id)
+        selected_product.views = selected_product.views + 1
         selected_size = request.GET.get('size')
         selected_product.save()
     except Product.DoesNotExist:
@@ -108,6 +203,7 @@ def single_product(request, product_id):
     }
 
     return render(request, 'single_product.html', context)
+
 def add_to_cart(request):
     if request.method == 'POST':
         data = json.loads(request.body)

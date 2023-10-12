@@ -13,17 +13,49 @@ class Category(models.Model):
     image=models.ImageField(upload_to='categoryimage/',null=True,blank=True)
     def __str__(self) -> str:
         return self.name
+from django.db import models
+
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    categories=models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category,null=True,blank=True)
     specification = models.TextField(max_length=2000)
     price = models.FloatField()
     image = models.ImageField(null=True, blank=True)
+    overrelayimage = models.ImageField(null=True, blank=True)
     colour_colour = ColorField()
     sizes = models.ManyToManyField('Size', through='ProductSize')
-    views=models.PositiveIntegerField(default=0)
+    # Define choices for the occasions
+    CASUAL_WEAR = 'Casual Wear'
+    COMFORT_WEAR = 'Comfort Wear'
+    STREET_WEAR = 'Street Wear'
+    CLUB_WEAR = 'Club Wear'
+    BEACH_WEAR = 'Beach Wear'
+    PARTY_WEAR = 'Party Wear'
+    HOLIDAY_WEAR = 'Holiday Wear'
+    WEEKEND_WEAR = 'Weekend Wear'
+    COLLEGE_WEAR = 'College Wear'
+    OFFICE_WEAR = 'Office Wear'
+
+    OCCASION_CHOICES = [
+        (CASUAL_WEAR, 'Casual Wear'),
+        (COMFORT_WEAR, 'Comfort Wear'),
+        (STREET_WEAR, 'Street Wear'),
+        (CLUB_WEAR, 'Club Wear'),
+        (BEACH_WEAR, 'Beach Wear'),
+        (PARTY_WEAR, 'Party Wear'),
+        (HOLIDAY_WEAR, 'Holiday Wear'),
+        (WEEKEND_WEAR, 'Weekend Wear'),
+        (COLLEGE_WEAR, 'College Wear'),
+        (OFFICE_WEAR, 'Office Wear'),
+    ]
+
+    occasions = models.CharField(max_length=20, choices=OCCASION_CHOICES, blank=True, null=True)
+
+    views = models.PositiveIntegerField(default=0)
+
     def __str__(self):
         return self.name
+
 class Size(models.Model):
     SIZE_CHOICES = (
         ('S', 'S'),

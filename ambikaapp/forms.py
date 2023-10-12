@@ -1,6 +1,13 @@
 from django import forms
 from .models import Product, Size,PlacedOrders,Order,OrderItem
+class SizeFilterForm(forms.Form):
+  sizes = forms.MultipleChoiceField(choices=Size.SIZE_CHOICES, required=False)
 
+  def filter(self, products):
+    if self.cleaned_data['sizes']:
+      return products.filter(sizes__in=self.cleaned_data['sizes'])
+    else:
+      return products
 class ProductForm(forms.ModelForm):
     sizes = forms.ModelMultipleChoiceField(
         queryset=Size.objects.all(),
@@ -9,7 +16,7 @@ class ProductForm(forms.ModelForm):
     )
     class Meta:
         model = Product
-        fields = ['name', 'colour_colour', 'specification', 'image','price']
+        fields = ['name', 'colour_colour', 'specification', 'image','price','overrelayimage','occasions']
     # Optional: Add custom validation logic if needed
     def clean(self):
         cleaned_data = super().clean()
