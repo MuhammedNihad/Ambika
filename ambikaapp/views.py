@@ -108,14 +108,27 @@ def bestseller(request):
     selected_occasions = request.GET.getlist('occasion')
     selected_categories = request.GET.getlist('category')
     selected_price_ranges = request.GET.getlist('price_range')
-    search_query = request.GET.get('q')
+    search_query = request.GET.get('q', '')
+    
+    # Perform a search query using the 'search_query' variable
+
     # Initialize the product queryset
     products = Product.objects.all()
+    selected_sort_option = request.GET.get('sort', None)
     selected_categories = request.GET.get('category', '').split(',')
     selected_categories = [int(cat_id) for cat_id in selected_categories if cat_id.isdigit()]
     selected_sizes = request.GET.get('size')
     selected_occasions = request.GET.getlist('occasion') or []
-
+    if selected_sort_option == 'newly_added':
+        products = products.order_by('-id')  # Sort by ID (newly added)
+    elif selected_sort_option == 'best_seller':
+        products = products.order_by('-views')  # Sort by views (best seller)
+    elif selected_sort_option == 'price_high_to_low':
+        products = products.order_by('-price')  # Sort by price high to low
+    elif selected_sort_option == 'price_low_to_high':
+        products = products.order_by('price')  # Sort by price low to high
+    elif search_query:
+        products = Product.objects.filter(name__icontains=search_query)
     # ...
 
     # Filter products based on selected occasions
@@ -129,9 +142,6 @@ def bestseller(request):
     if selected_sizes:
         products = products.filter(sizes__size__in=selected_sizes).distinct()
 
-
-    if search_query:
-        products = products.filter(Q(name__icontains=search_query))
     # Filter products based on selected sizes
     # Filter products based on selected categories
     if selected_categories:
@@ -154,6 +164,7 @@ def bestseller(request):
 
     # Get all categories
     categories = Category.objects.all()
+    
 
     context = {
         'sizes': sizes,

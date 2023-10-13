@@ -426,11 +426,13 @@
 
             <!-- <div class="content">            -->
  <div class="col-6 col-md-9 col-lg-9"> 
-  <div class="container"> 
-<div class="input-group"><form action="" method="get"></form>
-<input value="{{search_query}}"  type="text" name="q" class="form-control placeholder="Search for products in this collection">
-   <span type="submit" class="input-group-text"><i class="fa fa-search"></i></span>
+  <div class="container"> <form action="" method="get">
+<div class="input-group">
+  <input type="text" name="q" class="form-control" placeholder="Search for products in this collection" value="{{ search_query }}">
+  <span class="input-group-text">
+   <button type="submit" class="input-group-text fa fa-search"></button>
 </div></form>
+  </div>
 <div class="row my-4">
 <div class="col-sm">
   206 products   View As
@@ -438,23 +440,26 @@
 <button class="btn btn-outline-secondary add-btn" id="btn2">|||</button>
 <button class="btn btn-outline-secondary add-btn" id="btn3">||||</button> -->
 </div>
+
 <div class="col-sm">
-<div class="dropdown">
-<button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" id="custom">
-     Custom
-</button>
-<ul class="dropdown-menu" id="emi" >
- <li ><a class="dropdown-item" href="#" >Newly Added</a></li>
- <li ><a class="dropdown-item" href="#" >Curated For You</a></li>
- <li ><a class="dropdown-item" href="#" >Best Seller</a></li>
- <li ><a class="dropdown-item" href="#" >Price (High to Low)</a></li>
- <li ><a class="dropdown-item" href="#" >Price (Low to High)</a></li>
- <li ><a class="dropdown-item" href="#" >Relevance</a></li>
-  <li ><a class="dropdown-item" href="#" >Custom</a></li>
-  </ul>
-   </div>
+  <div class="dropdown">
+      <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" id="custom">
+          Custom
+      </button>
+      <form id="sorting-form" action="" method="get">
+        <ul class="dropdown-menu" id="emi">
+          <li><a class="dropdown-item" href="?sort=newly_added" data-sort="newly_added">Newly Added</a></li>
+          <li><a class="dropdown-item" href="?sort=best_seller" data-sort="best_seller">Best Seller</a></li>
+          <li><a class="dropdown-item" href="?sort=price_high_to_low" data-sort="price_high_to_low">Price (High to Low)</a></li>
+          <li><a class="dropdown-item" href="?sort=price_low_to_high" data-sort="price_low_to_high">Price (Low to High)</a></li>
+          
+      </ul>
+      
+      </form>
   </div>
-  </div>
+</div>
+
+
  
     <!---------------------- images------------------- -->
 
@@ -567,6 +572,18 @@
   $('input[name="price_range"]').change(function() {
       filterProducts();
   });
+  document.addEventListener('DOMContentLoaded', function () {
+    const sortingDropdown = document.getElementById('emi');
+    sortingDropdown.addEventListener('click', function (event) {
+        if (event.target.dataset.sort) {
+            const selectedSortOption = event.target.dataset.sort;
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('sort', selectedSortOption);
+            window.location.href = currentUrl.href;
+        }
+    });
+});
+
   // Initial filtering when the page loads
   filterProducts();
 </script>

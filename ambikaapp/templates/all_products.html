@@ -428,14 +428,12 @@
         ==================================== -->
         <div class="container">
             <h1 class="text-center">NEW ARRIVALS</h1>
-            <!------------------- first row ------------------- -->
+            <!-- First row -->
             <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4">
                 {% for newarrival in new_arrivals %}
                     <div class="col mb-4">
                         <div class="image-container">
-                        
-                                <img src="{{ newarrival.image.url }}" alt="" class="img-fluid">
-                            </a>
+                            <img src="{{ newarrival.image.url }}" alt="" class="img-fluid">
                             <div class="overlay">
                                 <!-- Add your overlay image here -->
                                 <img src="{{ newarrival.overrelayimage.url }}" alt="" class="img-fluid">
@@ -446,14 +444,14 @@
                         <div class="size-btn"> 
                             <!-- Loop through the sizes and create buttons -->
                             {% for size in newarrival.sizes.all %}
-                                <button data-product="{{ product.id }}"
-                                data-size="{{ size.size }}" class="btn btn-outline-secondary add-btn update-cart">{{ size.size }}</button>
+                                <a href="{% url 'single_product' newarrival.id %}" class="btn btn-outline-secondary add-btn update-cart">{{ size.size }}</a>
                             {% endfor %}
                         </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
+        
         
 </div>
 <div class="button-container"> 
@@ -675,7 +673,7 @@
     {% for trending_product in trending_products %}
         <div class="col mb-4">
             <div class="image-container">
-      
+                <a href="{% url 'single_product' product_id=trending_product.id %}">
                     <img src="{{ trending_product.image.url }}" alt="" class="img-fluid">
                 </a>
                 <div class="overlay">
@@ -686,9 +684,11 @@
             <p class="text-center">{{ trending_product.name }}</p>
             <p class="text-center">Rs. {{ trending_product.price }}</p>
             <div class="size-btn">
-                <!-- Loop through the sizes and create buttons -->
+                <!-- Loop through the sizes and create buttons with links to product details -->
                 {% for size in trending_product.sizes.all %}
-                    <button class="btn btn-outline-secondary add-btn">{{ size.size }}</button>
+                    <a href="{% url 'single_product' product_id=trending_product.id %}" class="btn btn-outline-secondary add-btn">
+                        {{ size.size }}
+                    </a>
                 {% endfor %}
             </div>
         </div>
