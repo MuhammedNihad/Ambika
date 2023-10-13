@@ -1,0 +1,225 @@
+body {
+    margin: 20px;
+    font-size: smaller;
+    
+    
+}
+
+/* Make images responsive */
+img, .btn {
+    max-width: 100%;
+    height: auto;
+}
+/* Center align content on small screens */
+@media (max-width: 767px) {
+    .align-center {
+        text-align: center;
+    }
+}
+/* Additional styles for responsiveness */
+@media (max-width: 992px) {
+    .product-images {
+        text-align: center;
+    }
+}
+/* quantity button */
+.button{
+    width: 25px;
+    height: 30px;
+    text-align: center;
+    border: none;
+}
+.quantity-input{
+    border: 1px solid rgb(238, 230, 230);
+    width: 85px;   
+}
+#text{
+    color: red;
+}
+/* size button */
+.btn{
+    height: 35px;
+    text-align: center;
+    
+}
+
+/* dropdown */
+#emibtn{
+    width: 500px;
+    height: 45px;
+    text-align: center;
+    border: 1px solid rgb(236, 231, 231);
+    cursor: pointer;
+    text-align: center;
+    padding-left: 150px;
+  }
+  #offerbtn{
+    width: 500px;
+    height: 45px;
+    text-align: center;
+    border: 1px solid rgb(236, 231, 231);
+    cursor: pointer;
+    text-align: center;
+    padding-left: 180px;
+  }
+  #emibtn:hover {
+    border-color: rgb(145, 139, 139); /* Change border color on hover */
+  }
+  #offerbtn:hover {
+    border-color:  rgb(145, 139, 139); /* Change border color on hover */
+  }
+  #emibody{
+    border: #b9b3b3;
+    padding-left: 150px;
+    padding-top: 10px;
+  }
+  #offerbody{
+    border: #b9b3b3;
+    padding-left: 200px;
+    padding-top: 10px;
+    height: 120px;
+  }
+  #emiicon{
+    color: rgb(212, 203, 203);
+    font-size: large;
+    padding-left: 120px;
+  }
+  #offericon{
+    color: rgb(212, 203, 203);
+    font-size: large;
+    padding-left: 130px;
+  }
+  /* add to cart */
+  #showOffcanvas{
+    width: 500px;
+    height: 40px;
+    text-align: center;
+  }
+
+  /* add to wishlist */
+  #btn2{
+    width: 500px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid rgb(181, 177, 177);
+  }
+
+  #btn3{
+    width: 600px;
+    height: 50px;
+    text-align: left;
+  }
+  #pincodeinput{
+    margin-left: 30px;
+    width: 400px;
+    height: 40px;
+  }
+  #pincode{
+    margin-left: 10px;
+      width: 100px;
+      height: 40px;
+  }
+
+  /* table elements */
+  #table{
+    text-align: center;
+    border: 1px solid rgb(182, 181, 181);
+  }
+  
+
+  /* rating part  */
+  .ratings{
+    margin-right:10px;
+}
+
+.ratings ,i{
+    
+    color:#b9b3b3;
+    font-size:13px;
+}
+
+.rating-color{
+    color:#fbc634 !important;
+}
+#box{
+    width: 100px;
+    height: 10px;
+    background-color: #b9b3b3;
+  }
+  /* product review  */
+
+  .review{
+    padding-top: 10px;
+    padding-right: 200px;
+  }
+  .star{
+    padding-left: 50px;
+  }
+  /* end of product review  */
+
+  #down, .down{
+    
+    color: #c89405;
+    width: 100%;
+    padding-right: 40px;
+    height: 50px;
+    border: none;
+    background-color: transparent;
+    text-align: start;
+    
+  }
+  .card{
+    padding-left: 20px;
+    border: none;
+  }
+  -----------/* cartpage offcanvas  */--------------
+
+
+/* Styles for the close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+} 
+#cartbtn{
+  width: 350px;
+  height: 50px;
+  color: white;
+  background-color: black;
+  /* margin-left: 10px; */
+
+} 
+
+/* Style the thumbnail images */
+.thumbnail {
+  /* width: 120px;
+  height: 120px; */
+  margin: 5px;
+  cursor: pointer;
+  border: 2px solid transparent; /* Add a transparent border initially */
+  transition: border-color 0.3s ease; /* Smooth transition for border color change */
+}
+
+.thumbnail:hover {
+  border-color: rgb(157, 149, 149); /* Change border color on hover */
+}
+.thumbnail-container:hover {
+  overflow-y: auto;
+}
+
+
+
+.thumbnail-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.thumbnail-container::-webkit-scrollbar-thumb {
+  background-color: #8d8e8fa9;
+}
+.thumbnail-container {
+  height: 700px; /* Set a fixed height for the thumbnail container */
+  overflow: hidden;
+  position: relative;
+}

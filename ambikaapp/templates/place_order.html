@@ -1,7 +1,73 @@
-<!-- place_order.html -->
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Place Order</button>
-  </form>
-  
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification</title>
+</head>
+<body>
+    <h1>OTP Verification</h1>
+    <form method="post" action="{% url 'place_order' %}">
+        {% csrf_token %}
+        <label for="otp_code">Enter OTP:</label>
+        <input type="text" id="otp_code" name="otp_code">
+        <button type="submit">Verify OTP</button>
+    </form>
+</body>
+</html>
+
+<script>
+
+function getToken(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+const csrftoken = getToken('csrftoken');
+// Validate the phone number.
+// Validate the phone number and send SMS.
+document.getElementById('verification-button').addEventListener('click', function() {
+  // Show the OTP form
+  document.getElementById('otp-form').style.display = 'block';
+
+  // Get the phone number entered by the user
+  var phoneNumber = document.getElementsByName('phone_number')[0].value;
+  var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+  // Send an AJAX request to your Django view to trigger the SMS sending
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/sendsms/', true); // Change the URL to match your Django URL pattern
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      console.log('SMS sent successfully');
+    } else {
+      console.error('Failed to send SMS');
+ 
+    }
+  };
+  xhr.send(JSON.stringify({
+  phone_number: phoneNumber,
+ 
+}));
+});
+
+document.getElementById('verification-button').addEventListener('click', function() {
+  document.getElementById('otp-form').style.display = 'block';
+});
+</script>
+<style>
+  #otp-form input {
+  background-color: green;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 4px;
+}
+</style>

@@ -1,0 +1,72 @@
+.image-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%; /* Set width to match the default image */
+    height: auto; /* Automatically adjust height */
+    opacity: 0;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+#viewbtn{
+    margin-left: 500px;
+    margin-bottom: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.border-button {
+    background-color: transparent;
+    color: black;
+    border: 2px solid rgb(195, 193, 193);
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 490px;
+    margin-bottom: 50px;
+}
+.border-button:hover {
+    border: 2px solid black;
+    color: black;
+  }
+  #text{
+    margin-top: 100px;
+  }
+  #text1{
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .scent-btn{
+    background-color: transparent;
+    color: black;
+    border: 2px solid rgb(195, 193, 193);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px; 
+    margin-bottom: 50px;
+    margin-left: 100px;
+  }
+  #sneak-btn{
+    padding: 8px;
+  }
+  
+

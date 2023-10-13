@@ -1,0 +1,121 @@
+
+
+#btn{
+    color: rgb(52, 48, 48);
+    background-color: transparent;
+    font-size: large;
+    font-weight: bold;
+    border: none;
+}
+
+#custom{
+    border: 1px solid rgb(222, 216, 216);
+    width: 400px;
+    height: 40px;
+    background-color: transparent;
+    text-align: left;
+}
+/* side bar css  */
+
+.fixed-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    width: 250px;
+    padding: 20px;
+
+}
+
+
+/* Give some space to the content to the right of the sidebar */
+.content {
+    margin-left: 260px; /* Adjust as needed */
+    padding: 20px; /* Adjust the padding as needed */
+}
+/* For WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 5px; /* Adjust the width as needed */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #bcb6b6; /* Color of the thumb (scrollbar handle) */
+    border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #605959; /* Color of the thumb on hover */
+}
+
+/* end of side bar css  */
+/* Style for the scroll to top button */
+#scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+#scrollToTopBtn:hover {
+    background-color: black;
+}
+/* image hover  */
+
+.image-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%; /* Set width to match the default image */
+    height: auto; /* Automatically adjust height */
+    opacity: 0;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+/* quick view button  */
+
+.view {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    opacity: 0; /* Initially hidden */
+}
+#viewbtn{
+    background-color: black;
+    color: white;
+    width: 200px;
+    height: 35px;
+
+}
+.image-container:hover .view{
+    position: absolute;
+    opacity: 1; 
+}

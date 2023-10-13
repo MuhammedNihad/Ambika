@@ -1,0 +1,103 @@
+
+.sarees-content, .dress-content, .salwar-content{
+    opacity: 0;
+    position: absolute;
+    width: 800px;
+    background-color: white; /* Add a background color */
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4); /* Add a box shadow for style */
+    padding-left: 20px;
+    padding-top: 10px;
+    text-decoration: none;
+}
+.lehengas-content{
+    opacity: 0;
+    position: absolute;
+    width: 650px;
+    background-color: white; /* Add a background color */
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4); /* Add a box shadow for style */
+    padding-left: 20px;
+    padding-top: 10px;
+    text-decoration: none;
+
+}
+.sale-content, .others-content, .new-content, .occasions-content {
+opacity: 0;
+    position: absolute;
+    width: 220px;
+    background-color: white; /* Add a background color */
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4); /* Add a box shadow for style */
+    padding-left: 20px;
+    padding-top: 10px;
+    
+}
+
+.specific-nav-section a{
+    text-decoration: none;
+    color: black;
+}
+
+
+
+.nav-item:hover .sale-content,
+.nav-item:hover .sarees-content,
+.nav-item:hover .dress-content,
+.nav-item:hover .salwar-content,
+.nav-item:hover .lehengas-content,
+.nav-item:hover .others-content,
+.nav-item:hover .new-content,
+.nav-item:hover .occasions-content {
+    opacity: 1;
+    display: block;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Ensure that the dropdown content is hidden by default */
+
+.nav-item .sale-content,
+.nav-item .sarees-content,
+.nav-item .dress-content,
+.nav-item .salwar-content,
+.nav-item .lehengas-content,
+.nav-item .others-content,
+.nav-item .new-content,
+.nav-item .occasions-content {
+    display: none;
+}
+.specific-nav-section .nav-link:hover {
+    animation:reverse;
+transition-duration: 0.4px;
+text-decoration: underline;
+text-decoration-thickness: 2px; /* Adjust the thickness as needed */
+text-underline-offset: 4px; /* Adjust the offset as needed */
+text-decoration-skip-ink: none; /* Prevent the underline from skipping characters */
+text-decoration-color: rgb(255, 252, 252);
+
+}
+.specific-nav-section #navigation{
+background-color: black;
+height: 50px;
+align-items: center;
+padding-left: 220px;
+}
+.specific-nav-section .navbar .nav-link{
+color:white;
+margin-right: 10px;
+}
+
+/* Default text color for larger screens */
+.specific-nav-section .navbar .nav-link {
+    color: white;
+}
+
+/* Media query for screens with a maximum width of 768px (adjust as needed) */
+@media (max-width: 768px) {
+    .specific-nav-section .navbar .nav-link, #demo {
+        color: white;
+        background-color: black;
+        padding-left: 20px;
+    }
+    .specific-nav-section #navigation{
+        padding-left: 1px;
+    }
+}

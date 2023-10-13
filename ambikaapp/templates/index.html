@@ -428,15 +428,17 @@
         ==================================== -->
         <div class="container">
             <h1 class="text-center">NEW ARRIVALS</h1>
-            <!-- First row -->
+            <!------------------- first row ------------------- -->
             <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4">
                 {% for newarrival in new_arrivals %}
                     <div class="col mb-4">
                         <div class="image-container">
-                            <img src="{{ newarrival.image.url }}" alt="" class="img-fluid">
+                            <a href="{% url 'product_detail' newarrival.id %}">
+                                <img src="{{ newarrival.image.url }}" alt="" class="img-fluid">
+                            </a>
                             <div class="overlay">
                                 <!-- Add your overlay image here -->
-                                <img src="{{ newarrival.overrelayimage.url }}" alt="" class="img-fluid">
+                                <img src="{{ nearrival.overrelay.url }}" alt="" class="img-fluid">
                             </div>
                         </div>
                         <p class="text-center">{{ newarrival.name }}</p>
@@ -444,14 +446,13 @@
                         <div class="size-btn"> 
                             <!-- Loop through the sizes and create buttons -->
                             {% for size in newarrival.sizes.all %}
-                                <a href="{% url 'single_product' newarrival.id %}" class="btn btn-outline-secondary add-btn update-cart">{{ size.size }}</a>
+                                <button class="btn btn-outline-secondary add-btn">{{ size.size }}</button>
                             {% endfor %}
                         </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
-        
         
 </div>
 <div class="button-container"> 
@@ -673,22 +674,20 @@
     {% for trending_product in trending_products %}
         <div class="col mb-4">
             <div class="image-container">
-                <a href="{% url 'single_product' product_id=trending_product.id %}">
+                <a href="{% url 'product_detail' trending_product.id %}">
                     <img src="{{ trending_product.image.url }}" alt="" class="img-fluid">
                 </a>
                 <div class="overlay">
                     <!-- Add your overlay image here -->
-                    <img src="{{ trending_product.overrelayimage.url }}" alt="" class="img-fluid">
+                    <img src="{{ trending_product.image.url }}" alt="" class="img-fluid">
                 </div>
             </div>
             <p class="text-center">{{ trending_product.name }}</p>
             <p class="text-center">Rs. {{ trending_product.price }}</p>
             <div class="size-btn">
-                <!-- Loop through the sizes and create buttons with links to product details -->
+                <!-- Loop through the sizes and create buttons -->
                 {% for size in trending_product.sizes.all %}
-                    <a href="{% url 'single_product' product_id=trending_product.id %}" class="btn btn-outline-secondary add-btn">
-                        {{ size.size }}
-                    </a>
+                    <button class="btn btn-outline-secondary add-btn">{{ size.size }}</button>
                 {% endfor %}
             </div>
         </div>
@@ -701,7 +700,7 @@
 <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4">
     {% for category in categories %}
         <div class="col mb-4">
-     
+            <a href="{% url 'category_detail' category.id %}">
                 <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid">
             </a>
             <p class="text-center">{{ category.name }}</p>
@@ -929,7 +928,24 @@
 </body>
 
 </html>
-<script type="text/javascript" scr="{% static 'Js/cart.js' %}"></script>
+<script type="text/javascript">var user='{{request.user}}'
+    function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getToken('csrftoken'); 
+    </script>
 <script>
    
 
