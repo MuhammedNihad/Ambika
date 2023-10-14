@@ -259,7 +259,7 @@ def add_to_cart(request):
 
     return JsonResponse({'error': 'Invalid request'})
 def cart(request, action=None):
-  	add_ons = AddOn.objects.all()
+    add_ons = AddOn.objects.all()
     if request.user.is_authenticated:
         # User is authenticated, retrieve cart items associated with the user
         user = request.user
@@ -267,39 +267,39 @@ def cart(request, action=None):
         order_items = cart.orderitem_set.all()
 
         # Calculate the price of products and their addon price in the cart
-		    total_addon_price_in_cart = sum(sum(addon_item.price for addon_item in order_item.add_on.all()) for order_item in order_items)
-		    total_amount = sum(item.product.price * item.quantity for item in order_items)
+        total_addon_price_in_cart = sum(sum(addon_item.price for addon_item in order_item.add_on.all()) for order_item in order_items)
+        total_amount = sum(item.product.price * item.quantity for item in order_items)
 
-    		# Add total_addon_price_in_cart to total_amount
-		    total_amount += float(total_addon_price_in_cart)
+        # Add total_addon_price_in_cart to total_amount
+        total_amount += float(total_addon_price_in_cart)
     else:
-		    # User is not authenticated, retrieve cart items from the session
-		    cart_session = request.session.get('cart', {})
-		    order_items = []
+        # User is not authenticated, retrieve cart items from the session
+        cart_session = request.session.get('cart', {})
+        order_items = []
 
-		    for product_id, item_data in cart_session.items():
-			      product = get_object_or_404(Product, pk=product_id)
-			      quantity = item_data.get('quantity', 0)
-			      size = item_data.get('size', '')
-		      	order_items.append({
-				        'id': product.id,
-			        	'product': product,
-				        'quantity': quantity,
-		        		'size': size,
-				        'total_price': product.price * quantity,
-		       	})
+        for product_id, item_data in cart_session.items():
+            product = get_object_or_404(Product, pk=product_id)
+            quantity = item_data.get('quantity', 0)
+            size = item_data.get('size', '')
+            order_items.append({
+                    'id': product.id,
+                    'product': product,
+                    'quantity': quantity,
+                    'size': size,
+                    'total_price': product.price * quantity,
+            })
 
-		# Calculate the total addon price in the cart;
-		# 'list-of-addons' is only present when addons are added to a product in the cart.
-		# If 'list-of-addons' is absent, consider the total addon price as 0.
-		# Otherwise, iterate through each item in the cart_session and their respective addons to sum up the prices.
-		total_addon_price_in_cart = sum(
-			addon['price'] if 'list-of-addons' in item else 0
-			for item in cart_session.values()
-			for addon in item.get('list-of-addons', []))
+        # Calculate the total addon price in the cart;
+        # 'list-of-addons' is only present when addons are added to a product in the cart.
+        # If 'list-of-addons' is absent, consider the total addon price as 0.
+        # Otherwise, iterate through each item in the cart_session and their respective addons to sum up the prices.
+        total_addon_price_in_cart = sum(
+            addon['price'] if 'list-of-addons' in item else 0
+            for item in cart_session.values()
+            for addon in item.get('list-of-addons', []))
 
-		total_amount = sum(item['total_price'] for item in order_items)
-		total_amount += float(total_addon_price_in_cart)
+        total_amount = sum(item['total_price'] for item in order_items)
+        total_amount += float(total_addon_price_in_cart)
 
 
     if action == 'increment':
@@ -356,6 +356,8 @@ def cart(request, action=None):
     }
 
     return render(request, 'cart.html', context)
+
+
 def update_quantity(request):
     if request.method == 'POST':
         # Extract data from the AJAX request
