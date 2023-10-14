@@ -364,14 +364,14 @@ def update_quantity(request):
         data = json.loads(request.body.decode('utf-8'))
         item_id = data.get('id')
         new_quantity = data.get('quantity')
-        customer = request.user.customer        
+
         # Check if the user is authenticated
-        if customer=="AnonymousUser":
-            print("anonymous")
         if request.user.is_authenticated:
             try:
                 # Retrieve the OrderItem instance by its ID
                 order_item = OrderItem.objects.get(pk=item_id)
+
+                customer = request.user.customer
 
                 order_item.quantity = new_quantity
                 order_item.customer = customer
