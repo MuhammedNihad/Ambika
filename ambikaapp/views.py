@@ -8,13 +8,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.validators import RegexValidator
 # Create your views here.
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,OrderItem,Order,PlacedOrders,Blog,Customer,Category,ProductSize,Size
+from django.views.decorators.http import require_http_methods
+from .models import Product,OrderItem,Order,PlacedOrders, AddOn, Blog,Customer,Category,ProductSize,Size
 from .forms import ProductForm,PlaceOrderForm,PlacedOrdersForm,ShippingForm,SizeFilterForm
 import os 
 from twilio.rest import Client
 TWILIO_ACCOUNT_SID="AC2aafc7bcbd200fc8adac03cfa8bc8510"
 TWILIO_AUTH_TOKEN="3064482eac918f7e5054b5054f887541"
 client=Client(TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN)
+
+
 def generate_random_otp():
     # Generate a random 6-digit OTP code
     otp_code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
@@ -256,29 +259,48 @@ def add_to_cart(request):
 
     return JsonResponse({'error': 'Invalid request'})
 def cart(request, action=None):
+  	add_ons = AddOn.objects.all()
     if request.user.is_authenticated:
         # User is authenticated, retrieve cart items associated with the user
         user = request.user
         cart, created = Order.objects.get_or_create(customer=user.customer, complete=False)
         order_items = cart.orderitem_set.all()
-        total_amount = sum(item.product.price * item.quantity for item in order_items)
+
+        # Calculate the price of products and their addon price in the cart
+		    total_addon_price_in_cart = sum(sum(addon_item.price for addon_item in order_item.add_on.all()) for order_item in order_items)
+		    total_amount = sum(item.product.price * item.quantity for item in order_items)
+
+    		# Add total_addon_price_in_cart to total_amount
+		    total_amount += float(total_addon_price_in_cart)
     else:
-        # User is not authenticated, retrieve cart items from the session
-        cart = request.session.get('cart', {})
-        order_items = []
+		    # User is not authenticated, retrieve cart items from the session
+		    cart_session = request.session.get('cart', {})
+		    order_items = []
 
-        for product_id, item_data in cart.items():
-            product = get_object_or_404(Product, pk=product_id)
-            quantity = item_data.get('quantity', 0)
-            size = item_data.get('size', '')
-            order_items.append({
-                'product': product,
-                'quantity': quantity,
-                'size': size,
-                'total_price': product.price * quantity,
-            })
+		    for product_id, item_data in cart_session.items():
+			      product = get_object_or_404(Product, pk=product_id)
+			      quantity = item_data.get('quantity', 0)
+			      size = item_data.get('size', '')
+		      	order_items.append({
+				        'id': product.id,
+			        	'product': product,
+				        'quantity': quantity,
+		        		'size': size,
+				        'total_price': product.price * quantity,
+		       	})
 
-        total_amount = sum(item['total_price'] for item in order_items)
+		# Calculate the total addon price in the cart;
+		# 'list-of-addons' is only present when addons are added to a product in the cart.
+		# If 'list-of-addons' is absent, consider the total addon price as 0.
+		# Otherwise, iterate through each item in the cart_session and their respective addons to sum up the prices.
+		total_addon_price_in_cart = sum(
+			addon['price'] if 'list-of-addons' in item else 0
+			for item in cart_session.values()
+			for addon in item.get('list-of-addons', []))
+
+		total_amount = sum(item['total_price'] for item in order_items)
+		total_amount += float(total_addon_price_in_cart)
+
 
     if action == 'increment':
         product_id = request.POST.get('product_id')
@@ -287,9 +309,9 @@ def cart(request, action=None):
         # Increment the quantity by 1
         order_item.quantity += 1
         order_item.save()
-        cart = request.session.get('cart', {})
-        cart[product_id] = {'size': size, 'quantity': quantity}
-        request.session['cart'] = cart
+        cart_session = request.session.get('cart', {})
+        cart_session[product_id] = {'size': size, 'quantity': quantity}
+        request.session['cart'] = cart_session
 
         return JsonResponse({'message': 'Quantity incremented successfully.'})
 
@@ -311,9 +333,9 @@ def cart(request, action=None):
         quantity = request.POST.get('quantity')
 
         # Add the product to the session cart
-        cart = request.session.get('cart', {})
-        cart[product_id] = {'size': size, 'quantity': quantity}
-        request.session['cart'] = cart
+        cart_session = request.session.get('cart', {})
+        cart_session[product_id] = {'size': size, 'quantity': quantity}
+        request.session['cart'] = cart_session
 
         return JsonResponse({'message': 'Product added to cart successfully.'})
 
@@ -321,13 +343,14 @@ def cart(request, action=None):
         product_id = request.POST.get('product_id')
 
         # Remove the product from the session cart
-        cart = request.session.get('cart', {})
-        if product_id in cart:
-            del cart[product_id]
-            request.session['cart'] = cart
+        cart_session = request.session.get('cart', {})
+        if product_id in cart_session:
+            del cart_session[product_id]
+            request.session['cart'] = cart_session
             return JsonResponse({'message': 'Product removed from cart successfully.'})
 
     context = {
+        'add_ons': add_ons,
         'order_items': order_items,
         'total_amount': total_amount,
     }
@@ -369,16 +392,15 @@ def update_quantity(request):
                     'message': 'OrderItem not found.',
                 }
                 return JsonResponse(response_data, status=404)
-        if not request.user.is_authenticated:
-            print("this is anony")
+        else:
             # If the user is not authenticated, update the session cart
-            cart = request.session.get('cart', {})
-            if item_id in cart:
+            cart_session = request.session.get('cart', {})
+            if item_id in cart_session:
                 if new_quantity <= 0:
-                    del cart[item_id]  # Remove the item if quantity is zero or less
+                    del cart_session[item_id]  # Remove the item if quantity is zero or less
                 else:
-                    cart[item_id]['quantity'] = new_quantity
-                request.session['cart'] = cart
+                    cart_session[item_id]['quantity'] = new_quantity
+                request.session['cart'] = cart_session
                 response_data = {
                     'success': True,
                     'message': 'Quantity updated successfully.',
@@ -391,6 +413,73 @@ def update_quantity(request):
                 }
                 return JsonResponse(response_data, status=404)
 
+@require_http_methods(["POST"])
+def update_addon(request):
+	try:
+		# Deserialize the JSON data from the request body
+		data = json.loads(request.body.decode('utf-8'))
+		orderitem_id = data.get('orderitem_id')
+		addon_id = data.get('addon_id')
+
+		# Input validation
+		if not orderitem_id or not addon_id:
+			return JsonResponse({"success": False, "message": "Invalid input data."}, status=400)
+
+		if request.user.is_authenticated:
+			order_item = get_object_or_404(OrderItem, pk=orderitem_id)
+			customer = order_item.customer
+
+			# Check if the user is associated with the customer object
+			if request.user == customer.user:
+				# Fetch the OrderItem and with the associated Customer
+				addon = get_object_or_404(AddOn, id=addon_id)
+
+				# Check if the addon is already associated with the order_item
+				if addon in order_item.add_on.all():
+					# Remove the addon from the order_item's ManyToMany relationship
+					order_item.add_on.remove(addon)
+					return JsonResponse({"success": True, "message": "Addon removed successfully."}, status=200)
+				else:
+					# Associate the addon with the order_item
+					order_item.add_on.add(addon)
+					return JsonResponse({"success": True, "message": "Addon associated successfully."}, status=200)
+			return JsonResponse({"success": False, "message": "User is not associated with customer object."}, status=403)
+		else:
+			# For unauthenticated users, the 'orderitem_id' variable should contain the Product ID sent from the frontend,
+			# as they intentionally do not have access to the 'OrderItem' model object.
+			product_id = orderitem_id
+			cart_session = request.session.get('cart', {})
+			addon_price = data.get('addon_price')
+
+			if not addon_price:
+				return JsonResponse({"success": False, "message": "Invalid price input"}, status=400)
+
+			if str(product_id) not in cart_session.keys():
+				return JsonResponse({"success": False, "message": "Given product is not found in cart"}, status=400)
+			else:
+				if "list-of-addons" not in cart_session[str(product_id)] or cart_session[str(product_id)]['list-of-addons'] == []:
+					cart_session[str(product_id)]['list-of-addons'] = [{"addonid": addon_id, "price": addon_price}]
+				else:
+					addon_list = cart_session[str(product_id)]['list-of-addons']
+					value_found = False
+
+					# Iterate through the list and check 'addonid' in each dictionary
+					for dictionary in addon_list:
+						if 'addonid' in dictionary and dictionary['addonid'] == addon_id:
+							value_found = True
+							break
+
+					if value_found:
+						addon_list.remove({"addonid": addon_id, "price": addon_price})
+					else:
+						addon_list.append({"addonid": addon_id, "price": addon_price})
+
+				# Save the session to persist the changes
+				request.session.save()
+				return JsonResponse({"success": True, "message": "Add-on updated for given cart item"}, status=200)
+	except Exception as e:
+		return JsonResponse({"success": False, "message": "An error occurred while processing the request.", "error": e}, status=500)
+  
 class PhoneNumberVerifier:
   def __init__(self, client):
     self.client = client

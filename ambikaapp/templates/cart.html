@@ -28,12 +28,57 @@ Your Cart
 				<button class="quantity-button" data-action="increment" data-id="{{ order_item.id }}">+</button>
 			</td>
 			<td class="price" data-id="{{ order_item.id }}" data-price="{{ order_item.product.price }}">₹{{ order_item.product.price }}</td>
+			<td>
+				<button id="showDropdownButton" onClick="toggleAddOnDropdown({{ order_item.id }})">Choose Add-ons</button>
+				<select id="dropdown-{{ order_item.id }}" name="addons" style="display: none;" multiple>
+					{% for addon_item in add_ons.all %}
+						<option value="{{ addon_item.id }}" onClick="updateAddOn({{ order_item.id }}, {{ addon_item.id }}, {{ addon_item.price }})">{{ addon_item.name }} - {{ addon_item.price }}</option>
+					{% endfor %}
+				</select>
+			</td>
 		</tr>
 		{% endfor %}
 	  <h5>{{ total_amount }}</h5>  
 	</tbody>
 </table>
 <script>
+	function toggleAddOnDropdown(orderItemId) {
+		var dropdown = document.getElementById("dropdown-"+orderItemId);
+		dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+	}
+	function updateAddOn(orderItemId, addOnId, addOnPrice) {
+		const data = {
+			'orderitem_id': orderItemId,
+			'addon_id': addOnId,
+			'addon_price': addOnPrice,
+		};
+
+		fetch('/update_addon/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrftoken,
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				console.log(data.message); // Output success message (if any)
+				location.reload();
+				// Update the total amount or display a confirmation message here
+			} else {
+				console.error(data.message); // Handle error message
+			}
+		})
+
+		.catch(error => {
+			console.error('Error:', error);
+			// Handle error (e.g., display an error message to the user)
+		});
+	}
+
+
 	function getToken(name) {
 		let cookieValue = null;
 		if (document.cookie && document.cookie !== '') {

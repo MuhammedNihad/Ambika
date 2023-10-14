@@ -12,5 +12,5 @@ admin.site.register(ProductReview)
 admin.site.register(ProductSize)
 admin.site.register(Size)
 admin.site.register(Category)
+admin.site.register(AddOn)
 admin.site.register(Blog)
-
